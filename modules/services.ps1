@@ -1,3 +1,4 @@
+# Autoria: @denalth
 # services.ps1 - VERSAO SUPREMA 2.1
 # Gerenciamento de servicos do Windows.
 
@@ -41,3 +42,4 @@ function Services-Interactive {
         }
     }
 }
+

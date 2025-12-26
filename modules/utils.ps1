@@ -1,3 +1,4 @@
+# Autoria: @denalth
 # utils.ps1 - VERSAO SUPREMA 2.1
 # Funcoes utilitarias: Logging, Confirmacao, Execucao Segura.
 
@@ -94,3 +95,4 @@ function Init-GitRepo {
         git -C $scriptDir commit -m "feat: initial commit"
     } -description "Inicializar Git"
 }
+

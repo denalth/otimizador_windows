@@ -1,3 +1,4 @@
+# Autoria: @denalth
 # privacy.ps1 - VERSAO SUPREMA 2.1
 # Configuracoes de privacidade e telemetria.
 
@@ -49,3 +50,4 @@ function Privacy-Interactive {
 
     Log-Success "Configuracoes de privacidade aplicadas."
 }
+

@@ -1,3 +1,4 @@
+<!-- Autoria: @denalth -->
 # ROADMAP_UX_GUI.md - Plano de Evolucao para Interface Grafica Moderna
 
 ## Visao de Futuro: Windows Optimizer 3.0 (GUI Edition)
@@ -97,3 +98,4 @@ OptimizadorGUI/
 O codigo PowerShell atual ja esta **modular e escalavel**. A transicao para GUI sera suave porque cada modulo (.ps1) pode ser chamado como um "servico" pelo frontend grafico.
 
 A recomendacao e: **WPF com .NET 8**, usando MVVM e temas Material Design.
+

@@ -1,14 +1,53 @@
-# main-orquestrador.ps1 - VERSAO SUPREMA DEFINITIVA 2.1
+# Autoria: @denalth
+# main-orquestrador.ps1 - VERSÃO SUPREMA DEFINITIVA 2.2
 # Orquestrador modular para Windows 11 - Dev / Gaming / Performance
+# Versão Autêntica por @denalth
 
-# === CONFIGURACAO INICIAL ===
+# === CONFIGURAÇÃO INICIAL ===
 $ErrorActionPreference = "Continue"
 $scriptPath = $MyInvocation.MyCommand.Definition
 $scriptDir = Split-Path -Parent $scriptPath
 if ([string]::IsNullOrEmpty($scriptDir)) { $scriptDir = $PWD }
 $modulesDir = Join-Path $scriptDir "modules"
 
-# === AUTO-ELEVACAO ===
+# === SISTEMA DE AUTENTICAÇÃO @denalth ===
+function Authenticate-User {
+    $attempts = 0
+    $maxAttempts = 3
+    $key = "@denalth"
+
+    while ($attempts -lt $maxAttempts) {
+        Clear-Host
+        Write-Host "`n  ================================================================" -ForegroundColor Cyan
+        Write-Host "  |                                                              |" -ForegroundColor Cyan
+        Write-Host "  |   WINDOWS OPTIMIZER - SISTEMA DE SEGURANCA                   |" -ForegroundColor Cyan
+        Write-Host "  |   Por: @denalth                                              |" -ForegroundColor Cyan
+        Write-Host "  |                                                              |" -ForegroundColor Cyan
+        Write-Host "  ================================================================" -ForegroundColor Cyan
+        Write-Host ""
+        
+        $inputKey = Read-Host "  Digite a palavra-chave de acesso"
+        
+        if ($inputKey -eq $key) {
+            Write-Host "`n  [ACESSO CONCEDIDO] Bem-vindo, @denalth.`n" -ForegroundColor Green
+            Start-Sleep -Seconds 1
+            return $true
+        } else {
+            $attempts++
+            Write-Host "`n  [ACESSO NEGADO] Palavra-chave incorreta ($attempts/$maxAttempts).`n" -ForegroundColor Red
+            Start-Sleep -Seconds 2
+        }
+    }
+    
+    Write-Host "  Muitas tentativas falhas. O script sera encerrado." -ForegroundColor Red
+    Start-Sleep -Seconds 2
+    exit
+}
+
+# Iniciar autenticação
+Authenticate-User
+
+# === AUTO-ELEVAÇÃO ===
 $CurrentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 if (-not $CurrentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host " O script precisa de permissoes de Administrador." -ForegroundColor Yellow
@@ -37,8 +76,8 @@ function Show-Banner {
     Write-Host ""
     Write-Host "  ================================================================" -ForegroundColor Cyan
     Write-Host "  |                                                              |" -ForegroundColor Cyan
-    Write-Host "  |        WINDOWS OPTIMIZER - VERSAO 2.1 SUPREMA                |" -ForegroundColor Cyan
-    Write-Host "  |        Para Devs, Gamers e Power Users                       |" -ForegroundColor Cyan
+    Write-Host "  |        WINDOWS OPTIMIZER - VERSAO 2.2 SUPREMA                |" -ForegroundColor Cyan
+    Write-Host "  |        Assinado por: @denalth                                |" -ForegroundColor Cyan
     Write-Host "  |                                                              |" -ForegroundColor Cyan
     Write-Host "  ================================================================" -ForegroundColor Cyan
     Write-Host ""
@@ -49,7 +88,7 @@ $moduleFiles = @(
     "utils.ps1", "bloatwares.ps1", "services.ps1", "energy.ps1", 
     "visuals.ps1", "wsl2.ps1", "devtools.ps1", "sdks.ps1", 
     "cleanup.ps1", "windowsupdate.ps1", "privacy.ps1", 
-    "gaming.ps1", "network.ps1"
+    "gaming.ps1", "network.ps1", "gui-selector.ps1", "profiles.ps1"
 )
 
 Write-Host "Carregando modulos..." -ForegroundColor Cyan
@@ -59,25 +98,19 @@ foreach ($m in $moduleFiles) {
     if (Test-Path $path) {
         try { 
             . $path
-            Write-Host "  [OK] $m" -ForegroundColor Green
             $loadedCount++ 
         } catch { 
-            Write-Host "  [ERRO] $m - $($_.Exception.Message)" -ForegroundColor Red 
+            Write-Host "  [ERRO] Falha ao carregar $m" -ForegroundColor Red 
         }
-    } else {
-        Write-Host "  [FALTA] $m" -ForegroundColor Yellow
     }
 }
-Write-Host ""
 
 # === INICIALIZACAO DE LOG ===
 try {
     if (Get-Command Initialize-Log -ErrorAction SilentlyContinue) {
         $global:LogFile = Initialize-Log -baseDir "$env:USERPROFILE\OrquestradorLogs"
     } else {
-        $logDir = "C:\OrquestradorLogs"
-        if (-not (Test-Path $logDir)) { New-Item $logDir -ItemType Directory -Force | Out-Null }
-        $global:LogFile = Join-Path $logDir "fallback.log"
+        $global:LogFile = "C:\OrquestradorLogs\fallback.log"
     }
 } catch {
     $global:LogFile = "C:\OrquestradorLogs\fallback.log"
@@ -91,21 +124,23 @@ function Show-MainMenu {
     Write-Host " Log: $global:LogFile" -ForegroundColor DarkGray
     Write-Host ""
     Write-Host " ============================================================" -ForegroundColor DarkCyan
-    Write-Host "  [1] Remover Bloatwares (Apps pre-instalados)" -ForegroundColor White
-    Write-Host "  [2] Gerenciar Servicos (Performance)" -ForegroundColor White
-    Write-Host "  [3] Plano de Energia (Ultimate Performance)" -ForegroundColor White
-    Write-Host "  [4] Ajustes Visuais (Animacoes/Tema)" -ForegroundColor White
-    Write-Host "  [5] Configurar WSL2 (Linux no Windows)" -ForegroundColor White
+    Write-Host "  [1] Perfis de Otimizacao Sugeridos (Interface GUI)" -ForegroundColor Green
     Write-Host " ------------------------------------------------------------" -ForegroundColor DarkGray
-    Write-Host "  [6] Instalar Ferramentas de Dev" -ForegroundColor Cyan
-    Write-Host "  [7] Instalar SDKs e Linguagens" -ForegroundColor Cyan
-    Write-Host "  [8] Privacidade e Telemetria" -ForegroundColor Yellow
-    Write-Host "  [9] Otimizacoes para Gaming" -ForegroundColor Yellow
-    Write-Host " [10] Configuracoes de Rede e DNS" -ForegroundColor Yellow
+    Write-Host "  [2] Remover Bloatwares (Apps pre-instalados)" -ForegroundColor White
+    Write-Host "  [3] Gerenciar Servicos (Performance)" -ForegroundColor White
+    Write-Host "  [4] Plano de Energia (Ultimate Performance)" -ForegroundColor White
+    Write-Host "  [5] Ajustes Visuais (Animacoes/Tema)" -ForegroundColor White
+    Write-Host "  [6] Configurar WSL2 (Linux no Windows)" -ForegroundColor White
     Write-Host " ------------------------------------------------------------" -ForegroundColor DarkGray
-    Write-Host " [11] Limpeza do Sistema (Profunda)" -ForegroundColor Magenta
-    Write-Host " [12] Atualizacoes do Windows" -ForegroundColor Magenta
-    Write-Host " [13] Inicializar Repositorio Git" -ForegroundColor Magenta
+    Write-Host "  [7] Instalar Ferramentas de Dev" -ForegroundColor Cyan
+    Write-Host "  [8] Instalar SDKs e Linguagens" -ForegroundColor Cyan
+    Write-Host "  [9] Privacidade e Telemetria" -ForegroundColor Yellow
+    Write-Host " [10] Otimizacoes para Gaming" -ForegroundColor Yellow
+    Write-Host " [11] Configuracoes de Rede e DNS" -ForegroundColor Yellow
+    Write-Host " ------------------------------------------------------------" -ForegroundColor DarkGray
+    Write-Host " [12] Limpeza do Sistema (Profunda)" -ForegroundColor Magenta
+    Write-Host " [13] Atualizacoes do Windows" -ForegroundColor Magenta
+    Write-Host " [14] Inicializar Repositorio Git" -ForegroundColor Magenta
     Write-Host " ------------------------------------------------------------" -ForegroundColor DarkGray
     Write-Host "  [0] Sair" -ForegroundColor Red
     Write-Host " ============================================================" -ForegroundColor DarkCyan
@@ -117,19 +152,20 @@ do {
     Show-MainMenu
     $choice = Read-Host " Escolha uma opcao"
     switch ($choice) {
-        "1" { if (Get-Command Remove-Bloatwares-Interactive -ErrorAction SilentlyContinue) { Remove-Bloatwares-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "2" { if (Get-Command Services-Interactive -ErrorAction SilentlyContinue) { Services-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "3" { if (Get-Command Enable-UltimatePerformance-Interactive -ErrorAction SilentlyContinue) { Enable-UltimatePerformance-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "4" { if (Get-Command Adjust-Visuals-Interactive -ErrorAction SilentlyContinue) { Adjust-Visuals-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "5" { if (Get-Command Setup-WSL2-Interactive -ErrorAction SilentlyContinue) { Setup-WSL2-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "6" { if (Get-Command Install-DevTools-Interactive -ErrorAction SilentlyContinue) { Install-DevTools-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "7" { if (Get-Command Install-SDKs-Interactive -ErrorAction SilentlyContinue) { Install-SDKs-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "8" { if (Get-Command Privacy-Interactive -ErrorAction SilentlyContinue) { Privacy-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "9" { if (Get-Command Gaming-Interactive -ErrorAction SilentlyContinue) { Gaming-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "10" { if (Get-Command Network-Interactive -ErrorAction SilentlyContinue) { Network-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "11" { if (Get-Command System-Cleanup-Interactive -ErrorAction SilentlyContinue) { System-Cleanup-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "12" { if (Get-Command WindowsUpdate-Interactive -ErrorAction SilentlyContinue) { WindowsUpdate-Interactive } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
-        "13" { if (Get-Command Init-GitRepo -ErrorAction SilentlyContinue) { Init-GitRepo -scriptDir $scriptDir } else { Write-Host " Modulo nao carregado." -ForegroundColor Red } }
+        "1" { if (Get-Command Profiles-Interactive -ErrorAction SilentlyContinue) { Profiles-Interactive } }
+        "2" { if (Get-Command Remove-Bloatwares-Interactive -ErrorAction SilentlyContinue) { Remove-Bloatwares-Interactive } }
+        "3" { if (Get-Command Services-Interactive -ErrorAction SilentlyContinue) { Services-Interactive } }
+        "4" { if (Get-Command Enable-UltimatePerformance-Interactive -ErrorAction SilentlyContinue) { Enable-UltimatePerformance-Interactive } }
+        "5" { if (Get-Command Adjust-Visuals-Interactive -ErrorAction SilentlyContinue) { Adjust-Visuals-Interactive } }
+        "6" { if (Get-Command Setup-WSL2-Interactive -ErrorAction SilentlyContinue) { Setup-WSL2-Interactive } }
+        "7" { if (Get-Command Install-DevTools-Interactive -ErrorAction SilentlyContinue) { Install-DevTools-Interactive } }
+        "8" { if (Get-Command Install-SDKs-Interactive -ErrorAction SilentlyContinue) { Install-SDKs-Interactive } }
+        "9" { if (Get-Command Privacy-Interactive -ErrorAction SilentlyContinue) { Privacy-Interactive } }
+        "10" { if (Get-Command Gaming-Interactive -ErrorAction SilentlyContinue) { Gaming-Interactive } }
+        "11" { if (Get-Command Network-Interactive -ErrorAction SilentlyContinue) { Network-Interactive } }
+        "12" { if (Get-Command System-Cleanup-Interactive -ErrorAction SilentlyContinue) { System-Cleanup-Interactive } }
+        "13" { if (Get-Command WindowsUpdate-Interactive -ErrorAction SilentlyContinue) { WindowsUpdate-Interactive } }
+        "14" { if (Get-Command Init-GitRepo -ErrorAction SilentlyContinue) { Init-GitRepo -scriptDir $scriptDir } }
         "0" { break }
     }
     if ($choice -ne "0" -and $choice -ne "") { 
@@ -138,4 +174,4 @@ do {
     }
 } while ($choice -ne "0")
 
-Write-Host "`n Obrigado por usar o Otimizador Windows!" -ForegroundColor Green
+Write-Host "`n Obrigado por usar o Otimizador Windows, @denalth!" -ForegroundColor Green

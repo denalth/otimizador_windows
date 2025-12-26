@@ -1,3 +1,4 @@
+# Autoria: @denalth
 # energy.ps1 - VERSAO SUPREMA 2.1
 # Configuracoes de energia e performance.
 
@@ -33,3 +34,4 @@ function Enable-UltimatePerformance-Interactive {
         Log-Success "Hibernacao desabilitada."
     }
 }
+

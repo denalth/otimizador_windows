@@ -1,66 +1,54 @@
-# Windows Optimizer - Versao 2.1 (Fusion Royale)
+# Autoria: @denalth
+# Windows Optimizer - Versão 2.2 (Supreme Identity)
 
-Orquestrador modular em PowerShell para otimizar Windows 11.
-Versao definitiva que integra a arquitetura modular com o Orquestrador Mestre v5.1.
-
----
-
-## Funcionalidades Principais
-
-### Otimizacao e Performance
-- Remove Bloatwares com explicacao detalhada de cada app.
-- Gerencia Servicos mostrando status, descricao e risco.
-- Ativa plano Ultimate Performance.
-- Gaming Boost: Game Mode, HAGS, tweaks de latencia.
-- Limpeza Profunda automatizada via CleanMgr.
-
-### Desenvolvimento
-- Instalacao rapida de DevTools e SDKs via winget.
-- Configuracao automatizada do WSL2.
-
-### Seguranca e Facilidade
-- Auto-Elevacao: Solicita Admin automaticamente.
-- Lancador .bat: Dois cliques para iniciar.
-- Backup: Criacao de Ponto de Restauracao.
-- Logs: Todas as acoes documentadas.
+O orquestrador modular definitivo para Windows 11, agora com a assinatura e segurança de **@denalth**.
 
 ---
 
-## Como Usar
+## 🔥 Novidades da Versão 2.2
 
-1. De dois cliques em `Lancar_Orquestrador.bat`.
-2. Ou via terminal: `.\main-orquestrador.ps1`
+### 🛡️ Segurança: Gatekeeper @denalth
+Para garantir a integridade e autoria do projeto, o script agora exige a palavra-chave obrigatória: **`@denalth`** ao iniciar. Sem ela, o motor de otimização não é carregado.
+
+### 🎨 Interface Gráfica Suprema (GUI)
+Além do tradicional terminal, agora contamos com um protótipo de interface gráfica moderna para a seleção de perfis de otimização. Um visual premium e intuitivo assinado por **@denalth**.
+
+### 🚀 Perfis de Otimização Inteligentes
+Acesse a **Opção [1]** para aplicar perfis prontos que automatizam dezenas de ajustes em segundos:
+- **Modo Dev:** Tudo para o desenvolvedor moderno (WSL2, Git, SDKs).
+- **Modo Gamer:** Foco total em FPS, latência de rede e baixa latência de hardware.
+- **Modo Trabalho:** Privacidade máxima, limpeza profunda e estabilidade do sistema.
 
 ---
 
-## Requisitos
-
-- Windows 10 (2004+) ou Windows 11
-- Privilegios de Administrador
-- winget (App Installer)
-
----
-
-## Estrutura do Projeto
+## 🏗️ Estrutura do Projeto
 
 ```
 Otimizador Windows/
-├── main-orquestrador.ps1    # Menu principal (v2.1)
-├── Lancar_Orquestrador.bat  # Launcher rapido
-├── README.md                
-├── CHANGELOG.MD             
-├── CONTRIBUTING.md          
-├── LICENSE                  
-├── version.txt              # 2.1.0
+├── main-orquestrador.ps1    # Menu principal v2.2 (Gatekeeper)
+├── Lancar_Orquestrador.bat  # Launcher rápido
+├── README.md                # Versão Supremo @denalth
+├── CHANGELOG.MD             # Histórico de versões
+├── CONTRIBUTING.md          # Guia de contribuição autoral
+├── LICENSE                  # Licença MIT
+├── version.txt              # 2.2.0
 ├── DOCS_PLANNING/           # Artefatos de planejamento
 │   ├── task.md
 │   ├── implementation_plan.md
-│   └── ROADMAP_UX_GUI.md
-└── modules/                 # 13 modulos funcionais
+│   ├── ROADMAP_UX_GUI.md
+│   └── WALKTHROUGH_V2.2.md
+└── modules/                 # 15 módulos funcionais @denalth
 ```
 
 ---
 
-## Licenca
+## 🚀 Como Usar
 
-Este projeto esta licenciado sob a Licenca MIT.
+1. Execute o **`Lancar_Orquestrador.bat`**.
+2. Digite a palavra-chave **`@denalth`** quando solicitado.
+3. Escolha o Perfil ou Módulo desejado e aproveite o Windows mais rápido do mundo.
+
+---
+
+## 🏷️ Autoria e Identidade
+Este projeto é uma obra autoral de **@denalth**. Cada arquivo contém a marcação de autoria para preservação da identidade e originalidade do código.

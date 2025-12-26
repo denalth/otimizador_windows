@@ -1,79 +1,46 @@
-﻿# visuals.ps1 - VERSÃƒO SUPREMA DEFINITIVA
-# Ajustes visuais para mÃ¡ximo desempenho.
+# Autoria: @denalth
+# visuals.ps1 - VERSAO SUPREMA 2.2
+# Ajustes visuais para maximo desempenho.
 
 function Adjust-Visuals-Interactive {
     Log-Info "=== AJUSTES VISUAIS ==="
 
-    Write-Host "`nOpÃ§Ãµes para melhorar responsividade em mÃ¡quinas com recursos limitados." -ForegroundColor Yellow
-    Write-Host "Recomendado para: PCs antigos, VMs, foco em performance.`n" -ForegroundColor Gray
+    Write-Host "`n O que estes ajustes fazem?" -ForegroundColor Yellow
+    Write-Host " Desativam efeitos visuais desnecessarios (transparencia, animacoes)" -ForegroundColor Gray
+    Write-Host " para tornar a interface do Windows mais rapida e responsiva.`n" -ForegroundColor Gray
 
-    # 1. TransparÃªncia
-    if (Confirm-YesNo "Desativar transparÃªncia do menu iniciar e barra de tarefas?") {
+    Write-Host " [Q] Voltar ao Menu Principal`n" -ForegroundColor DarkGray
+    $check = Read-Host " Pressione ENTER para continuar ou Q para voltar"
+    if ($check -eq 'q' -or $check -eq 'Q') { return }
+
+    # Transparencia
+    Write-Host "`n [ACAO] Desativar Transparencia" -ForegroundColor Cyan
+    Write-Host " O que vai acontecer: O efeito de vidro em janelas e barra de tarefas sera removido." -ForegroundColor Yellow
+    if (Confirm-YesNo "Desativar transparencia?") {
         Run-Safe -action {
-            $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
-            if (-not (Test-Path $path)) { New-Item -Path $path -Force | Out-Null }
-            Set-ItemProperty -Path $path -Name "EnableTransparency" -Value 0 -Type DWord
-        } -description "Desativar transparÃªncia"
+            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "EnableTransparency" -Value 0 -Type DWord
+        } -description "Desativar Transparencia"
     }
 
-    # 2. AnimaÃ§Ãµes de janela
-    if (Confirm-YesNo "Desativar animaÃ§Ãµes de minimizar/maximizar?") {
+    # Animacoes
+    Write-Host "`n [ACAO] Desativar Animacoes do Windows" -ForegroundColor Cyan
+    Write-Host " O que vai acontecer: Janelas abrirao instantaneamente sem 'deslizar'.`n" -ForegroundColor Yellow
+    if (Confirm-YesNo "Desativar animacoes?") {
         Run-Safe -action {
-            Set-ItemProperty "HKCU:\Control Panel\Desktop\WindowMetrics" "MinAnimate" "0"
-        } -description "Desativar MinAnimate"
+            Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "UserPreferencesMask" -Value ([byte[]](144,18,3,0,0,0,0,0)) -Type Binary
+            Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Value 0
+        } -description "Desativar Animacoes"
     }
 
-    # 3. Efeitos visuais gerais
-    if (Confirm-YesNo "Ajustar para 'Melhor Desempenho' (desativa maioria dos efeitos)?") {
+    # Dark Theme
+    Write-Host "`n [ACAO] Ativar Tema Escuro (Modo @denalth)" -ForegroundColor Cyan
+    Write-Host " O que vai acontecer: Todo o sistema padrao usara o tema escuro.`n" -ForegroundColor Yellow
+    if (Confirm-YesNo "Ativar Tema Escuro?") {
         Run-Safe -action {
-            $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects"
-            if (-not (Test-Path $path)) { New-Item -Path $path -Force | Out-Null }
-            Set-ItemProperty -Path $path -Name "VisualFXSetting" -Value 2 -Type DWord
-        } -description "Efeitos visuais: Melhor Desempenho"
+            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Value 0 -Type DWord
+            Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0 -Type DWord
+        } -description "Ativar Tema Escuro"
     }
 
-    # 4. Tema escuro
-    if (Confirm-YesNo "Ativar tema escuro do sistema?") {
-        Run-Safe -action {
-            $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"
-            Set-ItemProperty -Path $path -Name "AppsUseLightTheme" -Value 0 -Type DWord
-            Set-ItemProperty -Path $path -Name "SystemUsesLightTheme" -Value 0 -Type DWord
-        } -description "Ativar tema escuro"
-    }
-
-    # 5. remocaocaover Cortana da barra de tarefas
-    if (Confirm-YesNo "Ocultar botÃ£o da Cortana na barra de tarefas?") {
-        Run-Safe -action {
-            Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" "ShowCortanaButton" 0
-        } -description "Ocultar Cortana"
-    }
-
-    # 6. remocaocaover Widget/News
-    if (Confirm-YesNo "Desativar Widgets/News na barra de tarefas?") {
-        Run-Safe -action {
-            $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced"
-            Set-ItemProperty -Path $path -Name "TaskbarDa" -Value 0 -Type DWord -ErrorAction SilentlyContinue
-        } -description "Desativar Widgets"
-    }
-
-    # 7. remocaocaover Chat/Teams
-    if (Confirm-YesNo "remocaocaover Ã­cone do Chat/Teams da barra de tarefas?") {
-        Run-Safe -action {
-            Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" "TaskbarMn" 0
-        } -description "remocaocaover Chat/Teams"
-    }
-
-    Write-Host "`n[!] Algumas alteraÃ§Ãµes requerem logout ou reinÃ­cio." -ForegroundColor Yellow
-    Log-Success "Ajustes visuais aplicados."
+    Log-Success "Ajustes visuais concluidos."
 }
-
-function Restore-VisualEffects {
-    Log-Info "Restaurando efeitos visuais padrÃ£o..."
-    Run-Safe -action {
-        Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" "VisualFXSetting" 0
-        Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" "EnableTransparency" 1
-    } -description "Restaurar efeitos visuais"
-}
-
-
-

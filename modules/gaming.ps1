@@ -1,3 +1,4 @@
+# Autoria: @denalth
 # gaming.ps1 - VERSAO SUPREMA 2.1
 # Otimizacoes para gaming e baixa latencia.
 
@@ -51,3 +52,4 @@ function Gaming-Interactive {
 
     Log-Success "Otimizacoes de gaming aplicadas. Reinicie para ativar HAGS."
 }
+

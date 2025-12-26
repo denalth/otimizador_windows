@@ -1,62 +1,33 @@
-# Guia de Contribuicao
+# Autoria: @denalth
+# Guia de Contribuicao Supremo
 
-Obrigado por considerar contribuir com o Windows Optimizer!
+Obrigado por considerar contribuir com o Windows Optimizer v2.2!
+
+---
+
+## 🛡️ Regra de Ouro: Identidade @denalth
+Como este é um projeto assinado, qualquer contribuição ou novo módulo deve manter o padrão de autoria no cabeçalho e respeitar o sistema de **Gatekeeper** implementado por **@denalth**.
 
 ---
 
 ## Como Contribuir
 
-1. Faca um fork deste repositorio
-2. Clone seu fork localmente
-3. Crie uma branch para sua feature:
-   ```bash
-   git checkout -b feature/nome-da-feature
-   ```
-4. Faca suas alteracoes seguindo os padroes abaixo
-5. Teste executando o orquestrador
-6. Faca commit com mensagem clara
-7. Faca push e abra um Pull Request
+1. Faça um fork deste repositório.
+2. Crie sua branch: `git checkout -b feature/minha-melhoria`.
+3. Adicione a assinatura `# Autoria: @denalth` no topo de novos arquivos.
+4. Siga o padrão de **UX Informativa**: Explique o que a ação fará antes de pedir o `Confirm-YesNo`.
+5. Mantenha o encoding em **UTF-8 com BOM** para compatibilidade total.
 
 ---
 
-## Estrutura de Modulos
-
-Cada modulo deve seguir este padrao:
-
-```powershell
-# nome-modulo.ps1 - VERSAO SUPREMA
-# Descricao breve do que o modulo faz.
-
-function NomeModulo-Interactive {
-    Log-Info "=== TITULO DO MODULO ==="
-
-    Write-Host "O que isso faz?" -ForegroundColor Yellow
-    Write-Host "Explicacao detalhada antes de cada acao." -ForegroundColor Gray
-
-    if (Confirm-YesNo "Executar acao?") {
-        Run-Safe -action { ... } -description "Descricao"
-    }
-}
-```
+## �� Padrao GUI
+Se você for adicionar elementos visuais, utilize o arquivo `modules/gui-selector.ps1` como base, mantendo o design dark e moderno.
 
 ---
 
 ## Padrao de Commits
+- `feat(@denalth):` para novas funcionalidades.
+- `fix(@denalth):` para correções.
+- `docs(@denalth):` para documentação.
 
-| Prefixo | Uso |
-|---------|-----|
-| feat: | Nova funcionalidade |
-| fix: | Correcao de bug |
-| docs: | Documentacao |
-| refactor: | Refatoracao |
-| perf: | Otimizacao |
-| chore: | Tarefas diversas |
-
----
-
-## Codigo de Conduta
-
-- Seja respeitoso e construtivo
-- Escreva codigo limpo e comentado
-- Teste localmente antes de enviar PR
-- Documente alteracoes no CHANGELOG.MD
+Agradecemos o apoio para manter o Otimizador no patamar **SUPREMO**!

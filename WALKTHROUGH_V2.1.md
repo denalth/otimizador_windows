@@ -1,3 +1,4 @@
+<!-- Autoria: @denalth -->
 # Walkthrough: Otimizador Windows 2.1 (Fusion Royale)
 
 Esta versao e o resultado da fusao da arquitetura modular com o **Orquestrador Mestre v5.1**.
@@ -38,3 +39,4 @@ Adicionei a opcao `[Q] Voltar ao Menu` nos principais modulos para voce ter cont
 1. Va ate a pasta `F:\.Antigravity\Otimizador Windows\`.
 2. Dê dois cliques em **`Lancar_Orquestrador.bat`**.
 3. Divirta-se com a versao SUPREMA DEFINITIVA.
+

@@ -1,3 +1,4 @@
+# Autoria: @denalth
 # bloatwares.ps1 - VERSAO SUPREMA 2.1
 # Remove aplicativos pre-instalados do Windows 11.
 
@@ -56,3 +57,4 @@ function Remove-Bloatwares-Interactive {
         }
     }
 }
+

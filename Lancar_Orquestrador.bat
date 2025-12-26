@@ -1,3 +1,4 @@
+# Autoria: @denalth
 @echo off
 :: ==========================================================
 :: LAUNCHER ORQUESTRADOR WINDOWS 2.1
@@ -24,3 +25,4 @@ if %errorlevel% neq 0 (
     echo  Verifique se o arquivo 'main-orquestrador.ps1' esta na mesma pasta.
     pause
 )
+

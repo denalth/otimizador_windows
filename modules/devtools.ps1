@@ -1,80 +1,39 @@
-﻿# devtools.ps1 - VERSÃƒO SUPREMA DEFINITIVA
-# InstalaÃ§Ã£o de ferramentas de desenvolvimento via winget.
+# Autoria: @denalth
+# devtools.ps1 - VERSAO SUPREMA 2.2
+# Instalação de ferramentas via winget.
 
 function Install-DevTools-Interactive {
-    Log-Info "=== INSTALAÃ‡ÃƒO DE FERRAMENTAS DE DESENVOLVIMENTO ==="
+    Log-Info "=== FERRAMENTAS DE DESENVOLVIMENTO ==="
 
-    if (-not (Test-WingetAvailable)) {
-        Log-Error "winget nÃ£o encontrado. Instale o App Installer pela Microsoft Store."
-        return
-    }
+    Write-Host "`n O que e isso?" -ForegroundColor Yellow
+    Write-Host " Uma selecao de softwares essenciais para produtividade e dev automatizada." -ForegroundColor Gray
+
+    Write-Host " [Q] Voltar ao Menu Principal`n" -ForegroundColor DarkGray
+    $check = Read-Host " Pressione ENTER para continuar ou Q para voltar"
+    if ($check -eq 'q' -or $check -eq 'Q') { return }
 
     $tools = @(
-        @{Id = "Git.Git"; Name = "Git"; Desc = "Controle de versÃ£o"},
-        @{Id = "Microsoft.VisualStudioCode"; Name = "VS Code"; Desc = "Editor de cÃ³digo"},
-        @{Id = "Microsoft.WindowsTerminal"; Name = "Windows Terminal"; Desc = "Terminal moderno"},
-        @{Id = "Docker.DockerDesktop"; Name = "Docker Desktop"; Desc = "Containers"},
-        @{Id = "GitHub.GitHubDesktop"; Name = "GitHub Desktop"; Desc = "Cliente Git GUI"},
-        @{Id = "GitHub.cli"; Name = "GitHub CLI"; Desc = "GitHub na linha de comando"},
-        @{Id = "JetBrains.Toolbox"; Name = "JetBrains Toolbox"; Desc = "Gerenciador de IDEs JetBrains"},
-        @{Id = "Postman.Postman"; Name = "Postman"; Desc = "Teste de APIs"},
-        @{Id = "Insomnia.Insomnia"; Name = "Insomnia"; Desc = "Cliente REST alternativo"},
-        @{Id = "DBBrowserForSQLite.DBBrowserForSQLite"; Name = "DB Browser SQLite"; Desc = "Visualizador SQLite"},
-        @{Id = "dbeaver.dbeaver"; Name = "DBeaver"; Desc = "Cliente universal de banco de dados"},
-        @{Id = "Notepad++.Notepad++"; Name = "Notepad++"; Desc = "Editor de texto avanÃ§ado"},
-        @{Id = "WinSCP.WinSCP"; Name = "WinSCP"; Desc = "Cliente SFTP/SCP"},
-        @{Id = "PuTTY.PuTTY"; Name = "PuTTY"; Desc = "Cliente SSH"},
-        @{Id = "Yarn.Yarn"; Name = "Yarn"; Desc = "Gerenciador de pacotes JS"},
-        @{Id = "pnpm.pnpm"; Name = "pnpm"; Desc = "Gerenciador de pacotes JS rÃ¡pido"}
+        @{Name = "VS Code"; ID = "Microsoft.VisualStudioCode"; Desc = "Editor de codigo profissional."},
+        @{Name = "Git"; ID = "Git.Git"; Desc = "Controle de versao."},
+        @{Name = "Windows Terminal"; ID = "Microsoft.WindowsTerminal"; Desc = "Terminal moderno do Windows."},
+        @{Name = "Docker Desktop"; ID = "Docker.DockerDesktop"; Desc = "Gerenciamento de containers."},
+        @{Name = "DBeaver"; ID = "dbeaver.dbeaver"; Desc = "Gerencidor universal de Bancos de Dados."}
     )
 
-    Write-Host "`nFerramentas disponÃ­veis para instalaÃ§Ã£o:`n" -ForegroundColor Cyan
-
-    $selected = @()
-
     foreach ($tool in $tools) {
-        $installed = winget list --id $tool.Id 2>$null | Select-String $tool.Id
-        $status = if ($installed) { "[INSTALADO]" } else { "" }
-        
-        Write-Host "  $($tool.Name) - $($tool.Desc) $status" -ForegroundColor $(if ($installed) { "DarkGray" } else { "White" })
-        
-        if (-not $installed -and (Confirm-YesNo "Instalar $($tool.Name)?")) {
-            $selected += $tool
+        Write-Host "`n [$($tool.Name)]" -ForegroundColor Cyan
+        Write-Host " $($tool.Desc)" -ForegroundColor Gray
+        if (Confirm-YesNo "Instalar $($tool.Name)?") {
+            Run-Safe -action {
+                winget install --id $tool.ID -e --silent --accept-package-agreements --accept-source-agreements
+            } -description "Instalar $($tool.Name)"
         }
     }
-
-    if ($selected.Count -eq 0) {
-        Log-Info "Nenhuma ferramenta selecionada."
-        return
-    }
-
-    Write-Host "`n--- Instalando $($selected.Count) ferramenta(s) ---" -ForegroundColor Cyan
-
-    $i = 0
-    foreach ($tool in $selected) {
-        $i++
-        Show-Progress -Activity "Instalando DevTools" -Status "$($tool.Name) ($i/$($selected.Count))" -PercentComplete (($i / $selected.Count) * 100)
-        
-        Run-Safe -action { 
-            winget install --id $tool.Id -e --silent --accept-package-agreements --accept-source-agreements
-        } -description "Instalar $($tool.Name)"
-    }
-
-    Write-Progress -Activity "Instalando DevTools" -Completed
-    Log-Success "InstalaÃ§Ã£o de ferramentas concluÃ­da."
 }
 
 function Install-DevTools-Essentials {
-    Log-Info "Instalando ferramentas essenciais (Git, VS Code, Terminal)..."
-    
-    $essentials = @("Git.Git", "Microsoft.VisualStudioCode", "Microsoft.WindowsTerminal")
-    
-    foreach ($id in $essentials) {
-        Run-Safe -action { 
-            winget install --id $id -e --silent --accept-package-agreements --accept-source-agreements
-        } -description "Instalar $id"
+    $essentialIds = @("Git.Git", "Microsoft.VisualStudioCode", "Microsoft.WindowsTerminal")
+    foreach ($id in $essentialIds) {
+        winget install --id $id -e --silent --accept-package-agreements --accept-source-agreements
     }
 }
-
-
-

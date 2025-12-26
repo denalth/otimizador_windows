@@ -1,3 +1,4 @@
+# Autoria: @denalth
 # cleanup.ps1 - VERSAO SUPREMA 2.1
 # Limpeza profunda do sistema.
 
@@ -47,3 +48,4 @@ function System-Cleanup-Interactive {
 
     Log-Success "Limpeza finalizada."
 }
+
