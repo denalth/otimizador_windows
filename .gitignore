@@ -1,0 +1,30 @@
+# Logs
+*.log
+OrquestradorLogs/
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# PowerShell
+*.ps1xml
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Temporários
+*.tmp
+*.temp
+~$*
+
+# Pacotes gerados
+*.zip
+orquestrador-package/
+
+# macOS
+.DS_Store
+
+# Git
+*.orig

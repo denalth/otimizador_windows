@@ -1,0 +1,9 @@
+# Normalize line endings for Git on Windows
+* text=auto eol=lf
+# PowerShell scripts need CRLF on Windows execution, but keep source as LF?
+# Best practice for cross-platform PowerShell core: LF
+# Best practice for Windows PowerShell 5.1: Let Git handle text conversion.
+# We will enforce LF for storage to avoid clutter, PS Core handles LF fine.
+
+# Denote linguist
+*.ps1 linguist-language=PowerShell
