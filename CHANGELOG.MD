@@ -3,26 +3,23 @@
 
 ---
 
-## [2.2.0] - 2025-12-26 (Supreme Identity & GUI)
+## [3.2.0] - 2025-12-26 (Supreme App GUI)
+
+### �� Nova Experiencia de Aplicativo (APP)
+- **Interface por Categorias**: Navegacao lateral intuitiva com 7 categorias coloridas.
+- **Painel de Acoes Dinamico**: Cada categoria mostra suas acoes com nome e descricao detalhada.
+- **Log em Tempo Real**: Console interno que mostra exatamente o que esta sendo feito.
+- **Barra de Progresso**: Feedback visual constante durante a execucao.
+- **Confirmacoes Obrigatorias**: Popups interativos para garantir que voce tem controle total.
 
 ### 🛡️ Seguranca e Identidade
-- **Gatekeeper @denalth**: Sistema de autenticacao obrigatoria ao iniciar o script.
-- **Assinatura Autoral**: Marcação `@denalth` adicionada ao cabecalho de todos os arquivos.
-- **Versao Suprema**: Branding "@denalth" integrado ao banner e menus.
-
-### 🎨 Nova Interface (GUI)
-- **Supreme GUI Selector**: Protótipo de interface gráfica moderna integrada ao modulo de perfis.
-- **Visual Dark Mode**: Design escuro com cores Cyan e Gray para uma experiencia premium.
-
-### 🚀 Perfis e Performance
-- **Modulo de Perfis**: Adicao de 3 modos inteligentes: Modo Dev, Modo Gamer e Modo Trabalho.
-- **Barra de Progresso**: Implementacao de `Write-Progress` para feedback visual em tempo real.
-
-### ✨ Refinamentos
-- **UX Informativa Total**: Todos os 14 modulos padronizados com explicacoes detalhadas.
-- **Reordenacao do Menu**: Menu mais intuitivo com Perfis em destaque (Opcao 1).
+- **Gatekeeper @denalth**: Sistema de autenticacao integrado a interface grafica.
+- **Assinatura Autoral**: Marcação `@denalth` em 100% dos arquivos.
 
 ---
 
-## [2.1.0] - 2025-12-26 (Fusion Royale)
+## [2.2.0] - 2025-12-26
+- Prototipo inicial de GUI e Perfis.
+
+## [2.1.0] - 2025-12-26
 - Integracao Mestre v5.1 e Launcher .bat.

@@ -1,23 +1,26 @@
 # Autoria: @denalth
-# Windows Optimizer - Versão 2.2 (Supreme Identity)
+# Windows Optimizer - Versão 3.2 (Supreme App GUI)
 
-O orquestrador modular definitivo para Windows 11, agora com a assinatura e segurança de **@denalth**.
+O aplicativo de otimização definitivo para Windows 11, agora com uma interface gráfica profissional e a assinatura de **@denalth**.
 
 ---
 
-## 🔥 Novidades da Versão 2.2
+## 🔥 Novidades da Versão 3.2
+
+### 🖥️ Aplicativo com Interface Gráfica (APP)
+Adeus terminal! Agora você gerencia seu Windows através de uma interface visual moderna organizada por categorias, com feedback em tempo real e barra de progresso.
 
 ### 🛡️ Segurança: Gatekeeper @denalth
-Para garantir a integridade e autoria do projeto, o script agora exige a palavra-chave obrigatória: **`@denalth`** ao iniciar. Sem ela, o motor de otimização não é carregado.
+Para garantir a integridade e autoria do projeto, o aplicativo exige a palavra-chave obrigatória: **`@denalth`**.
 
-### 🎨 Interface Gráfica Suprema (GUI)
-Além do tradicional terminal, agora contamos com um protótipo de interface gráfica moderna para a seleção de perfis de otimização. Um visual premium e intuitivo assinado por **@denalth**.
-
-### 🚀 Perfis de Otimização Inteligentes
-Acesse a **Opção [1]** para aplicar perfis prontos que automatizam dezenas de ajustes em segundos:
-- **Modo Dev:** Tudo para o desenvolvedor moderno (WSL2, Git, SDKs).
-- **Modo Gamer:** Foco total em FPS, latência de rede e baixa latência de hardware.
-- **Modo Trabalho:** Privacidade máxima, limpeza profunda e estabilidade do sistema.
+### 🚀 Categorias de Otimização
+- **Performance**: Ultimate Power, HAGS, Game Mode, TCP Tweaks.
+- **Limpeza**: TEMP, Lixeira, Prefetch.
+- **Privacidade**: Telemetria, Ad ID, Cortana.
+- **Visuais**: Tema Escuro, Transparência, Animações.
+- **Serviços**: Gerenciamento de serviços críticos.
+- **Windows Update**: Verificar, Pausar e Retomar atualizações.
+- **Dev Tools**: Instalação rápida de Git, VS Code, Node.js e Python.
 
 ---
 
@@ -25,30 +28,25 @@ Acesse a **Opção [1]** para aplicar perfis prontos que automatizam dezenas de 
 
 ```
 Otimizador Windows/
-├── main-orquestrador.ps1    # Menu principal v2.2 (Gatekeeper)
-├── Lancar_Orquestrador.bat  # Launcher rápido
+├── Lancar_APP.bat           # Launcher oficial do Aplicativo
+├── Lancar_GUI.ps1           # Motor da Interface Gráfica v3.2
+├── main-orquestrador.ps1    # Menu clássico via terminal
 ├── README.md                # Versão Supremo @denalth
 ├── CHANGELOG.MD             # Histórico de versões
-├── CONTRIBUTING.md          # Guia de contribuição autoral
-├── LICENSE                  # Licença MIT
-├── version.txt              # 2.2.0
+├── version.txt              # 3.2.0
 ├── DOCS_PLANNING/           # Artefatos de planejamento
-│   ├── task.md
-│   ├── implementation_plan.md
-│   ├── ROADMAP_UX_GUI.md
-│   └── WALKTHROUGH_V2.2.md
-└── modules/                 # 15 módulos funcionais @denalth
+└── modules/                 # Módulos funcionais @denalth
 ```
 
 ---
 
 ## 🚀 Como Usar
 
-1. Execute o **`Lancar_Orquestrador.bat`**.
-2. Digite a palavra-chave **`@denalth`** quando solicitado.
-3. Escolha o Perfil ou Módulo desejado e aproveite o Windows mais rápido do mundo.
+1. Execute o **`Lancar_APP.bat`**.
+2. Digite a palavra-chave **`@denalth`**.
+3. Selecione a categoria e execute as otimizações desejadas.
 
 ---
 
 ## 🏷️ Autoria e Identidade
-Este projeto é uma obra autoral de **@denalth**. Cada arquivo contém a marcação de autoria para preservação da identidade e originalidade do código.
+Este projeto é uma obra autoral de **@denalth**. Cada arquivo contém a marcação de autoria para preservar a originalidade do código.
