@@ -13,6 +13,10 @@
 - [ ] Icone customizado no .exe
 - [ ] Self-Update (verificacao automatica)
 
+## 👤 TAREFAS DO MESTRE (@denalth)
+- [ ] Subir para o Git manualmente (Commit/Tag v5.2.1)
+- [ ] Validar ocultacao total do terminal
+
 ---
 
 ## ⚠️ TAREFA RECORRENTE (OBRIGATORIA)
@@ -21,8 +25,8 @@
 - [ ] version.txt
 - [ ] README.md
 - [ ] CHANGELOG.MD
-- [ ] LICENSE (se houver mudanca de autoria)
-- [ ] CONTRIBUTING.md (se houver mudanca de workflow)
+- [ ] LICENSE
+- [ ] CONTRIBUTING.md
 - [ ] DOCS_PLANNING/task.md
 - [ ] DOCS_PLANNING/implementation_plan.md
 

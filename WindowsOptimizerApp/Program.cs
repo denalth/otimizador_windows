@@ -1,6 +1,6 @@
 // Autoria: @denalth
 // Program.cs - Windows Optimizer v5.2.1
-// Aplicativo nativo C# com Splash Screen e Debug Persistente
+// Aplicativo nativo C# com Terminal Oculto
 
 using System;
 using System.Drawing;
@@ -87,10 +87,11 @@ class MainForm : Form
 
         ProcessStartInfo psi = new ProcessStartInfo {
             FileName = "powershell.exe",
-            // ARGUMENTO -NoExit FORCADO PARA DEPURACAO
-            Arguments = "-NoProfile -ExecutionPolicy Bypass -File \"" + scriptPath + "\"",
+            // REMOVIDO -NoExit E ADICIONADO -WindowStyle Hidden
+            Arguments = "-WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -File \"" + scriptPath + "\"",
             Verb = "runas",
-            UseShellExecute = true
+            UseShellExecute = true,
+            WindowStyle = ProcessWindowStyle.Hidden // Força ocultação
         };
 
         try {
@@ -113,4 +114,3 @@ class Program
         Application.Run(new MainForm());
     }
 }
-
