@@ -1,6 +1,19 @@
 # Autoria: @denalth
 # Changelog - Windows Optimizer
 
+## [6.0.3] - 2025-12-27 (Fixed Visuals & Actions)
+### Corrigido
+- **Encoding UTF-8 BOM**: Resolvido o problema de caracteres quebrados (mojibake) em emojis e acentos.
+- **Ações Reativadas**: Todas as 57 ações do sistema migradas para o novo padrão WPF estável.
+- **Estabilidade WPF**: Removidos erros de parsing de Dispatcher e ScriptBlocks.
+## [6.0.0] - 2025-12-27 (Interface WPF Premium)
+### Nova Arquitetura
+- **WPF Nativo**: Migração completa de WinForms para WPF via PowerShell dinâmico.
+- **Design GitHub Dark**: Paleta de cores premium (#0D1117, #58A6FF, #3FB950).
+- **Emojis Coloridos**: 🎨 Cada categoria e ação tem seu emoji temático.
+- **Acentuação pt-BR**: Suporte completo a caracteres acentuados.
+- **Animações de Hover**: Botões com feedback visual elegante.
+- **601 Linhas de Código**: Interface robusta e bem estruturada.
 ## [5.4.2] - 2025-12-27 (Supreme Final Edition)
 ### Corrigido
 - **Sintaxe Critica**: Corrigidos erros de parsing na funcao Install-WithValidation.
@@ -37,5 +50,7 @@
 
 ## [5.2.0] - 2025-12-27
 - Elite Modern UI.
+
+
 
 

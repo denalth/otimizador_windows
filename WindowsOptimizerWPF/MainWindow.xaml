@@ -1,0 +1,70 @@
+<Window x:Class="WindowsOptimizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="⚡ Windows Optimizer v6.0.0 | @denalth" 
+        Height="750" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundBrush}"
+        FontFamily="Segoe UI Variable, Segoe UI">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="320"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- SIDEBAR -->
+        <Border Grid.Column="0" Background="{StaticResource SidebarBrush}">
+            <StackPanel Margin="10">
+                <TextBlock Text="⚡ OPTIMIZER" FontSize="20" FontWeight="Bold" 
+                           Foreground="{StaticResource AccentBrush}" Margin="10,15,0,25"/>
+                
+                <Button Style="{StaticResource CategoryButton}" Content="⚡ Performance" Tag="PERFORMANCE" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="🧹 Limpeza" Tag="LIMPEZA" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="🛡️ Segurança" Tag="SEGURANCA" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="🔒 Privacidade" Tag="PRIVACIDADE" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="🎨 Visuais" Tag="VISUAIS" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="⚙️ Serviços" Tag="SERVICOS" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="🔄 Windows Update" Tag="UPDATE" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="💻 Dev Tools" Tag="DEVTOOLS" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="📦 SDKs" Tag="SDKS" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="🐧 WSL2" Tag="WSL2" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="🌐 Rede" Tag="REDE" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="🗑️ Bloatwares" Tag="BLOATWARES" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="👤 Perfis" Tag="PERFIS" Click="Category_Click"/>
+                <Button Style="{StaticResource CategoryButton}" Content="🚀 Self-Update" Tag="SELFUPDATE" Click="Category_Click"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- CONTEÚDO PRINCIPAL -->
+        <Border Grid.Column="1" Padding="25">
+            <StackPanel x:Name="ActionPanel">
+                <TextBlock x:Name="CategoryTitle" Text="Selecione uma categoria" 
+                           FontSize="24" FontWeight="Bold" Foreground="{StaticResource TextBrush}" 
+                           Margin="0,0,0,20"/>
+                
+                <TextBlock Text="👈 Escolha uma categoria no menu lateral para começar a otimizar seu Windows!" 
+                           Foreground="{StaticResource TextDimBrush}" FontSize="14" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- LOG PANEL -->
+        <Border Grid.Column="2" Background="{StaticResource SidebarBrush}" Padding="15">
+            <StackPanel>
+                <TextBlock Text="📋 LOG DE EXECUÇÃO" FontSize="14" FontWeight="SemiBold" 
+                           Foreground="{StaticResource AccentBrush}" Margin="0,0,0,15"/>
+                
+                <TextBox x:Name="LogBox" Height="620" IsReadOnly="True" 
+                         Background="#0D1117" Foreground="{StaticResource SuccessBrush}"
+                         BorderThickness="0" FontFamily="Cascadia Code, Consolas" FontSize="11"
+                         TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- FOOTER -->
+        <TextBlock Grid.Column="1" Text="Windows Optimizer v6.0.0 | @denalth | Interface Premium WPF 🚀" 
+                   Foreground="{StaticResource TextDimBrush}" FontSize="11"
+                   VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+    </Grid>
+</Window>

@@ -1,34 +1,24 @@
 # Autoria: @denalth
-# Windows Optimizer v5.4.2 (Real Validation Edition)
+# Windows Optimizer v6.0.3 (Interface WPF Premium)
 
-O otimizador definitivo para Windows 11 com **57 acoes reais** e **validacao pos-execucao**.
+O otimizador definitivo para Windows 11 com **interface WPF moderna**, **emojis coloridos** e **acentuação pt-BR**.
 
-![Version](https://img.shields.io/badge/Version-5.4.0-blue)
+![Version](https://img.shields.io/badge/Version-6.0.0-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## Novidades da v5.4.2
-- **Feedback Honesto**: Cada acao verifica se realmente funcionou antes de informar "OK".
-- **Diagnostico Expandido**: CPU, RAM, OS e Disco com dados reais.
-- **Instalacoes Validadas**: Verifica se o programa foi instalado antes de confirmar.
-- **Relatorios Automaticos**: Energia abre automaticamente no navegador.
+## ✨ Novidades da v6.0.3
+- 🎨 **Interface WPF Premium**: Design inspirado no GitHub Dark com cores vibrantes.
+- 🎭 **Emojis Coloridos**: Cada categoria tem seu emoji temático.
+- 🇧🇷 **Acentuação Completa**: Textos em português brasileiro perfeito.
+- ⚡ **57 Ações Reais**: Com validação e feedback transparente.
 
-## Inicio Rapido
-1. Execute `WindowsOptimizer.exe` como Admin.
-2. Selecione uma categoria no menu lateral.
-3. Clique em EXECUTAR e veja o log de validacao.
+## 🚀 Início Rápido
+1. Execute `WindowsOptimizer.exe` como Administrador.
+2. Selecione uma categoria no menu lateral (com emojis!).
+3. Clique em EXECUTAR e acompanhe o log em tempo real.
 
-## Categorias (14)
-PERFORMANCE | LIMPEZA | SEGURANCA | PRIVACIDADE | VISUAIS | SERVICOS | WINDOWS UPDATE | DEV TOOLS | SDKS | WSL2 | REDE | BLOATWARES | PERFIS | SELF-UPDATE
+## 📦 Categorias
+⚡ Performance | 🧹 Limpeza | 🛡️ Segurança | 🔒 Privacidade | 🎨 Visuais | ⚙️ Serviços | 🔄 Windows Update | 💻 Dev Tools | 📦 SDKs | 🐧 WSL2 | 🌐 Rede | 🗑️ Bloatwares | 👤 Perfis | 🚀 Self-Update
 
-## Estrutura
-```
-Otimizador Windows/
-├── WindowsOptimizer.exe  # Launcher C# (portatil)
-├── Lancar_GUI.ps1        # Interface Principal
-├── modules/              # Modulos de suporte
-└── version.txt           # 5.4.0
-```
-
-Desenvolvido por @denalth | 2025
-
+Desenvolvido com 💜 por @denalth | 2025
 
