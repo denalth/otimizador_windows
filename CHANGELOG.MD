@@ -1,29 +1,18 @@
+@'
 # Autoria: @denalth
 # Changelog
 
 ---
 
-## [4.1.0] - 2025-12-27 (Native Selection)
+## [4.1.1] - 2025-12-27 (Elite Clean Edition)
 
-### 🎯 Controle Cirurgico (Selecao Individual)
-- **Modulos Interativos**: Implementada a selecao por numeros em `devtools.ps1`, `sdks.ps1`, `bloatwares.ps1` e `services.ps1`.
-- **Limpeza Granular**: `cleanup.ps1` agora permite escolher areas especificas de limpeza.
-- **UX Aprimorada**: Resumo das escolhas antes da execucao e barra de progresso em lote.
+### �� Refatoracao e Auditoria (Elite Clean)
+- **Ponto de Entrada Unico**: O WindowsOptimizer.exe agora e o lancador oficial e exclusivo, abrindo a Interface Grafica (GUI) por padrao.
+- **Remocao de Legados**: Eliminacao de arquivos .bat redundantes, walkthroughs desatualizados e prototipos de GUI antigos.
+- **Consolidacao de Branding**: Pastas e arquivos renomeados para 'Windows Optimizer' em todo o ecossistema.
+- **Sincronizacao de Versao**: Banner do terminal e cabecalhos atualizados para v4.1.1.
 
-### 🏷️ Branding "Windows Optimizer"
-- Executavel renomeado para `WindowsOptimizer.exe`.
-- Pasta do codigo-fonte renomeada para `WindowsOptimizerApp`.
-- Atualizacao completa da identidade visual nos menus.
-
-### 📄 Licenca e Documentacao
-- **LICENSE**: Adicionada versao em Portugues (PT-BR) junto a versao em Ingles.
-- **README**: Atualizado com as novas funcionalidades de selecao.
-
----
-
-## [4.0.0] - 2025-12-26
-- Evolucao para C# (.NET Native Wrapper).
-- Arquitetura Hibrida.
-
-## [3.2.0] - 2025-12-26
-- Interface por Categorias e Log Dinamico.
+### 🎯 Controle Cirurgico (Fase 5)
+- **Selecao Individual**: Implementada selecao granular em devtools.ps1, sdks.ps1, loatwares.ps1, services.ps1 e cleanup.ps1.
+- **LICENSE**: Adicionada versao em Portugues (PT-BR).
+'@

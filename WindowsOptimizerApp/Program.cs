@@ -53,7 +53,7 @@ namespace SupremeOptimizer
 
             // Botão Principal
             btnStart = new Button();
-            btnStart.Text = "LANÇAR MOTOR DE OTIMIZAÇÃO";
+            btnStart.Text = "ABRIR INTERFACE DE OTIMIZAÇÃO";
             btnStart.Size = new Size(350, 60);
             btnStart.Location = new Point(50, 150);
             btnStart.FlatStyle = FlatStyle.Flat;
@@ -79,7 +79,7 @@ namespace SupremeOptimizer
         private void btnStart_Click(object sender, EventArgs e)
         {
             // Procurar o script na pasta do F: (onde estão seus módulos)
-            string scriptPath = @"F:\.Antigravity\Otimizador Windows\main-orquestrador.ps1";
+            string scriptPath = @"F:\.Antigravity\Otimizador Windows\Lancar_GUI.ps1";
 
             if (File.Exists(scriptPath))
             {
@@ -111,3 +111,4 @@ namespace SupremeOptimizer
         }
     }
 }
+

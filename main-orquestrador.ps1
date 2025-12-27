@@ -173,3 +173,5 @@ do {
 } while ($choice -ne "0")
 
 Write-Host "`n Obrigado por usar o Otimizador Windows, @denalth!" -ForegroundColor Green
+
+

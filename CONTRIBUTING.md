@@ -1,33 +1,19 @@
 # Autoria: @denalth
-# Guia de Contribuicao Supremo
+# Guia de Contribuicao - Windows Optimizer
 
-Obrigado por considerar contribuir com o Windows Optimizer v2.2!
+Obrigado por se interessar em melhorar o **Windows Optimizer**! Este projeto segue um rigoroso padrao de qualidade e identidade estabelecido por **@denalth**.
 
----
-
-## 🛡️ Regra de Ouro: Identidade @denalth
-Como este é um projeto assinado, qualquer contribuição ou novo módulo deve manter o padrão de autoria no cabeçalho e respeitar o sistema de **Gatekeeper** implementado por **@denalth**.
-
----
+## Padroes de Codigo
+1. **Identidade**: Todo novo arquivo ou funcao deve conter o comentario de autoria `# Autoria: @denalth`.
+2. **Modularizacao**: Novas funcionalidades devem ser adicionadas como modulos em `modules/` e carregadas pelo `main-orquestrador.ps1`.
+3. **UX Informativa**: Antes de qualquer acao, explique ao usuario o que sera feito e peca confirmacao.
+4. **Encoding**: Use sempre `UTF-8 com BOM` em arquivos PowerShell para evitar erros de caracteres especiais.
 
 ## Como Contribuir
-
-1. Faça um fork deste repositório.
-2. Crie sua branch: `git checkout -b feature/minha-melhoria`.
-3. Adicione a assinatura `# Autoria: @denalth` no topo de novos arquivos.
-4. Siga o padrão de **UX Informativa**: Explique o que a ação fará antes de pedir o `Confirm-YesNo`.
-5. Mantenha o encoding em **UTF-8 com BOM** para compatibilidade total.
+1. Faca um Fork do projeto.
+2. Crie uma Branch para sua feature.
+3. Garanta que o `WindowsOptimizer.exe` (C#) e os scripts `.ps1` estao sincronizados.
+4. Abra um Pull Request detalhado.
 
 ---
-
-## �� Padrao GUI
-Se você for adicionar elementos visuais, utilize o arquivo `modules/gui-selector.ps1` como base, mantendo o design dark e moderno.
-
----
-
-## Padrao de Commits
-- `feat(@denalth):` para novas funcionalidades.
-- `fix(@denalth):` para correções.
-- `docs(@denalth):` para documentação.
-
-Agradecemos o apoio para manter o Otimizador no patamar **SUPREMO**!
+Assidado por: @denalth

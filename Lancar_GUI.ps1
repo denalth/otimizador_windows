@@ -1,5 +1,5 @@
-﻿# Autoria: @denalth
-# Lancar_GUI.ps1 - Windows Optimizer GUI v3.2 COMPLETA COM CATEGORIAS
+# Autoria: @denalth
+# Lancar_GUI.ps1 - Windows Optimizer GUI v4.1.1 COMPLETA COM CATEGORIAS
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -346,7 +346,7 @@ function Show-LoginWindow {
 # ========== JANELA PRINCIPAL ==========
 function Show-MainWindow {
     $global:MainForm = New-Object System.Windows.Forms.Form
-    $global:MainForm.Text = "Windows Optimizer v3.2 - by @denalth"
+    $global:MainForm.Text = "Windows Optimizer v4.1.1 - by @denalth"
     $global:MainForm.Size = New-Object System.Drawing.Size(900, 650)
     $global:MainForm.StartPosition = "CenterScreen"
     $global:MainForm.BackColor = $ColorDark
@@ -355,7 +355,7 @@ function Show-MainWindow {
 
     # Header
     $Header = New-Object System.Windows.Forms.Label
-    $Header.Text = "WINDOWS OPTIMIZER v3.2"
+    $Header.Text = "WINDOWS OPTIMIZER v4.1.1"
     $Header.Font = New-Object System.Drawing.Font("Segoe UI", 18, [System.Drawing.FontStyle]::Bold)
     $Header.ForeColor = $ColorAccent
     $Header.Location = New-Object System.Drawing.Point(300, 10)
@@ -436,7 +436,7 @@ function Show-MainWindow {
 
     # Footer
     $Footer = New-Object System.Windows.Forms.Label
-    $Footer.Text = "Powered by @denalth | Windows Optimizer v3.2 | 7 Categorias | 20+ Acoes"
+    $Footer.Text = "Powered by @denalth | Windows Optimizer v4.1.1 | 7 Categorias | 20+ Acoes"
     $Footer.Font = New-Object System.Drawing.Font("Segoe UI", 9)
     $Footer.ForeColor = [System.Drawing.Color]::Gray
     $Footer.Location = New-Object System.Drawing.Point(260, 575)

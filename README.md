@@ -25,7 +25,7 @@ O projeto permanece protegido pela palavra-chave **`@denalth`**.
 
 ## 🚀 Como Usar
 
-1. Execute **`WindowsOptimizer.exe`**.
+1. Execute o **`WindowsOptimizer.exe`** para abrir a interface profissional.
 2. Clique em **"LANCAR MOTOR DE OTIMIZACAO"**.
 3. No terminal, digite a senha `@denalth`.
 4. Use os menus numericos para selecionar as melhorias.
@@ -50,3 +50,4 @@ Otimizador Windows/
 
 ## 🏷️ Autoria e Identidade
 Este projeto e uma obra autoral de **@denalth**. Cada arquivo contém a marcação de autoria para preservar a integridade do código.
+
