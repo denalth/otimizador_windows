@@ -1,6 +1,10 @@
 # Autoria: @denalth
 # Changelog - Windows Optimizer
 
+## [6.0.4] - 2025-12-27 (Botões Completos)
+### Adicionado
+- **Eventos de Clique**: Todos os 14 botões de categoria agora funcionam (Dev Tools, SDKs, WSL2, Perfis).
+- **15 Add_Click Events**: Cobertura total de interação na GUI WPF.
 ## [6.0.3] - 2025-12-27 (Fixed Visuals & Actions)
 ### Corrigido
 - **Encoding UTF-8 BOM**: Resolvido o problema de caracteres quebrados (mojibake) em emojis e acentos.
@@ -50,6 +54,7 @@
 
 ## [5.2.0] - 2025-12-27
 - Elite Modern UI.
+
 
 
 
