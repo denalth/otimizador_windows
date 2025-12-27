@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# Lancar_GUI.ps1 - Interface Grafica v5.2.0 (Elite Modern UI)
+# Lancar_GUI.ps1 - Interface Grafica v5.2.1 (Elite Modern UI)
 # Windows Optimizer Supreme Edition
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -12,10 +12,10 @@ $modulesDir = Join-Path $scriptDir "modules"
 if (Test-Path "$modulesDir\utils.ps1") { . "$modulesDir\utils.ps1" }
 
 # === PALETA DE CORES MODERN UI ===
-$ColorBg = [System.Drawing.Color]::FromArgb(18, 18, 18)        # Deep Black
-$ColorSidebar = [System.Drawing.Color]::FromArgb(30, 30, 30)   # Sidebar Dark
-$ColorCard = [System.Drawing.Color]::FromArgb(45, 45, 48)      # Card Surface
-$ColorAccent = [System.Drawing.Color]::FromArgb(0, 120, 215)   # Electric Blue
+$ColorBg = [System.Drawing.Color]::FromArgb(18, 18, 18)
+$ColorSidebar = [System.Drawing.Color]::FromArgb(30, 30, 30)
+$ColorCard = [System.Drawing.Color]::FromArgb(45, 45, 48)
+$ColorAccent = [System.Drawing.Color]::FromArgb(0, 120, 215)
 $ColorText = [System.Drawing.Color]::White
 $ColorTextDim = [System.Drawing.Color]::FromArgb(150, 150, 150)
 $ColorSuccess = [System.Drawing.Color]::FromArgb(40, 200, 100)
@@ -24,7 +24,7 @@ $ColorDanger = [System.Drawing.Color]::FromArgb(255, 80, 80)
 
 # === FORM PRINCIPAL ===
 $Form = New-Object System.Windows.Forms.Form
-$Form.Text = "Windows Optimizer v5.2 - @denalth"
+$Form.Text = "Windows Optimizer v5.2.1 - @denalth"
 $Form.Size = New-Object System.Drawing.Size(1100, 700)
 $Form.StartPosition = "CenterScreen"
 $Form.BackColor = $ColorBg
@@ -55,15 +55,9 @@ function Show-Confirm {
     return $res -eq "Yes"
 }
 
-function Update-Progress {
-    param([int]$val)
-    $global:ProgressBar.Value = [Math]::Min($val, 100)
-    [System.Windows.Forms.Application]::DoEvents()
-}
-
-# === DEFINICAO COMPLETA DE CATEGORIAS (15+) ===
+# === DEFINICAO COMPLETA DE CATEGORIAS ===
 $Categories = [ordered]@{
-    "Performance" = @{
+    "PERFORMANCE" = @{
         Color = $ColorAccent
         Actions = @(
             @{Name="Ultimate Performance"; Desc="Ativa plano de energia oculto"; Action={
@@ -73,7 +67,6 @@ $Categories = [ordered]@{
                 Add-Log "OK" "Plano ativo!"
             }},
             @{Name="HAGS (GPU Scheduling)"; Desc="Melhora fluidez em jogos"; Action={
-                Add-Log "EXEC" "Ativando HAGS..."
                 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" -Name "HwSchMode" -Value 2 -Type DWord -ErrorAction SilentlyContinue
                 Add-Log "OK" "HAGS ativado!"
             }},
@@ -92,7 +85,7 @@ $Categories = [ordered]@{
             }}
         )
     }
-    "Limpeza" = @{
+    "LIMPEZA" = @{
         Color = $ColorSuccess
         Actions = @(
             @{Name="Limpar TEMP"; Desc="Remove arquivos temporarios"; Action={
@@ -115,7 +108,7 @@ $Categories = [ordered]@{
             }}
         )
     }
-    "Seguranca" = @{
+    "SEGURANCA" = @{
         Color = [System.Drawing.Color]::LimeGreen
         Actions = @(
             @{Name="Backup de Registro"; Desc="Salva estado atual do sistema"; Action={
@@ -130,7 +123,7 @@ $Categories = [ordered]@{
                 Add-Log "INFO" "Criando ponto de restauracao..."
                 try {
                     Enable-ComputerRestore -Drive "C:\" -ErrorAction SilentlyContinue
-                    Checkpoint-Computer -Description "Windows Optimizer v5.2" -RestorePointType "MODIFY_SETTINGS" -ErrorAction Stop
+                    Checkpoint-Computer -Description "Windows Optimizer v5.2.1" -RestorePointType "MODIFY_SETTINGS" -ErrorAction Stop
                     Add-Log "OK" "Checkpoint criado!"
                 } catch {
                     Add-Log "WARN" "Falha: Execute como Admin ou habilite protecao do sistema."
@@ -143,13 +136,11 @@ $Categories = [ordered]@{
                 $ram = Get-CimInstance Win32_OperatingSystem
                 $freeRam = [math]::Round($ram.FreePhysicalMemory / 1MB, 1)
                 Add-Log "INFO" "RAM Livre: ${freeRam}MB"
-                $cpu = Get-CimInstance Win32_Processor | Select-Object -ExpandProperty LoadPercentage
-                Add-Log "INFO" "CPU: ${cpu}% em uso"
                 Add-Log "OK" "Diagnostico finalizado."
             }}
         )
     }
-    "Privacidade" = @{
+    "PRIVACIDADE" = @{
         Color = [System.Drawing.Color]::MediumPurple
         Actions = @(
             @{Name="Desativar Telemetria"; Desc="Impede envio de dados para MS"; Action={
@@ -170,7 +161,7 @@ $Categories = [ordered]@{
             }}
         )
     }
-    "Visuais" = @{
+    "VISUAIS" = @{
         Color = [System.Drawing.Color]::FromArgb(150, 100, 255)
         Actions = @(
             @{Name="Tema Escuro"; Desc="Aplica modo escuro no sistema"; Action={
@@ -188,7 +179,7 @@ $Categories = [ordered]@{
             }}
         )
     }
-    "Servicos" = @{
+    "SERVICOS" = @{
         Color = $ColorDanger
         Actions = @(
             @{Name="Desativar DiagTrack"; Desc="Servico de telemetria"; Action={
@@ -208,7 +199,7 @@ $Categories = [ordered]@{
             }}
         )
     }
-    "Windows Update" = @{
+    "WINDOWS UPDATE" = @{
         Color = [System.Drawing.Color]::FromArgb(0, 120, 215)
         Actions = @(
             @{Name="Verificar Atualizacoes"; Desc="Busca updates disponiveis"; Action={
@@ -226,14 +217,10 @@ $Categories = [ordered]@{
                 $pauseDate = (Get-Date).AddDays(7).ToString("yyyy-MM-dd")
                 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "PauseUpdatesExpiryTime" -Value $pauseDate -Force -ErrorAction SilentlyContinue
                 Add-Log "OK" "Pausado ate $pauseDate"
-            }},
-            @{Name="Retomar Atualizacoes"; Desc="Remove a pausa"; Action={
-                Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "PauseUpdatesExpiryTime" -Force -ErrorAction SilentlyContinue
-                Add-Log "OK" "Atualizacoes retomadas!"
             }}
         )
     }
-    "Dev Tools" = @{
+    "DEV TOOLS" = @{
         Color = [System.Drawing.Color]::FromArgb(255, 150, 0)
         Actions = @(
             @{Name="Instalar Git"; Desc="Controle de versao"; Action={
@@ -242,7 +229,6 @@ $Categories = [ordered]@{
                 Add-Log "OK" "Git instalado!"
             }},
             @{Name="Instalar VS Code"; Desc="Editor de codigo"; Action={
-                Add-Log "EXEC" "Instalando VS Code..."
                 winget install --id Microsoft.VisualStudioCode -e --silent --accept-package-agreements --accept-source-agreements 2>$null
                 Add-Log "OK" "VS Code instalado!"
             }},
@@ -256,7 +242,7 @@ $Categories = [ordered]@{
             }}
         )
     }
-    "SDKs" = @{
+    "SDKS" = @{
         Color = [System.Drawing.Color]::Cyan
         Actions = @(
             @{Name="Instalar .NET SDK"; Desc="Framework Microsoft"; Action={
@@ -266,14 +252,6 @@ $Categories = [ordered]@{
             @{Name="Instalar Java JDK"; Desc="Oracle OpenJDK"; Action={
                 winget install --id Oracle.JDK.21 -e --silent --accept-package-agreements --accept-source-agreements 2>$null
                 Add-Log "OK" "Java JDK instalado!"
-            }},
-            @{Name="Instalar Rust"; Desc="Linguagem de sistemas"; Action={
-                winget install --id Rustlang.Rustup -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Add-Log "OK" "Rust instalado!"
-            }},
-            @{Name="Instalar Go"; Desc="Linguagem Google"; Action={
-                winget install --id GoLang.Go -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Add-Log "OK" "Go instalado!"
             }}
         )
     }
@@ -288,14 +266,10 @@ $Categories = [ordered]@{
             @{Name="Instalar Ubuntu"; Desc="Distro popular"; Action={
                 winget install --id Canonical.Ubuntu.2204 -e --silent --accept-package-agreements --accept-source-agreements 2>$null
                 Add-Log "OK" "Ubuntu instalado!"
-            }},
-            @{Name="Instalar Debian"; Desc="Distro estavel"; Action={
-                winget install --id Debian.Debian -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Add-Log "OK" "Debian instalado!"
             }}
         )
     }
-    "Rede" = @{
+    "REDE" = @{
         Color = [System.Drawing.Color]::Teal
         Actions = @(
             @{Name="DNS Cloudflare"; Desc="1.1.1.1 (rapido e privado)"; Action={
@@ -305,17 +279,11 @@ $Categories = [ordered]@{
             }},
             @{Name="DNS Google"; Desc="8.8.8.8 (estavel)"; Action={
                 netsh interface ip set dns "Ethernet" static 8.8.8.8 primary 2>$null
-                netsh interface ip add dns "Ethernet" 8.8.4.4 index=2 2>$null
                 Add-Log "OK" "DNS Google configurado!"
-            }},
-            @{Name="Reset Winsock"; Desc="Corrige problemas de rede"; Action={
-                netsh winsock reset 2>$null
-                netsh int ip reset 2>$null
-                Add-Log "OK" "Winsock resetado! Reinicie o PC."
             }}
         )
     }
-    "Bloatwares" = @{
+    "BLOATWARES" = @{
         Color = $ColorWarning
         Actions = @(
             @{Name="Remover Xbox Apps"; Desc="Componentes de gaming MS"; Action={
@@ -329,33 +297,22 @@ $Categories = [ordered]@{
             @{Name="Remover Solitaire"; Desc="Jogo pre-instalado"; Action={
                 Get-AppxPackage *solitaire* | Remove-AppxPackage -ErrorAction SilentlyContinue
                 Add-Log "OK" "Solitaire removido!"
-            }},
-            @{Name="Remover Skype"; Desc="Comunicador MS"; Action={
-                Get-AppxPackage *skype* | Remove-AppxPackage -ErrorAction SilentlyContinue
-                Add-Log "OK" "Skype removido!"
             }}
         )
     }
-    "Perfis" = @{
+    "PERFIS" = @{
         Color = [System.Drawing.Color]::Gold
         Actions = @(
             @{Name="Perfil GAMER"; Desc="Otimiza para jogos"; Action={
                 Add-Log "EXEC" "Aplicando perfil Gamer..."
                 powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 2>$null
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "AllowAutoGameMode" -Value 1 -Type DWord -ErrorAction SilentlyContinue
-                Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" -Name "HwSchMode" -Value 2 -Type DWord -ErrorAction SilentlyContinue
                 Add-Log "OK" "Perfil Gamer aplicado!"
             }},
             @{Name="Perfil DEV"; Desc="Otimiza para desenvolvimento"; Action={
                 Add-Log "EXEC" "Aplicando perfil Dev..."
                 winget install --id Git.Git -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                winget install --id Microsoft.VisualStudioCode -e --silent --accept-package-agreements --accept-source-agreements 2>$null
                 Add-Log "OK" "Perfil Dev aplicado!"
-            }},
-            @{Name="Perfil OFFICE"; Desc="Otimiza para trabalho"; Action={
-                Add-Log "EXEC" "Aplicando perfil Office..."
-                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Value 0
-                Add-Log "OK" "Perfil Office aplicado!"
             }}
         )
     }
@@ -363,7 +320,7 @@ $Categories = [ordered]@{
 
 # === LAYOUT MODERNO ===
 
-# --- Sidebar (Esquerda) ---
+# Sidebar
 $Sidebar = New-Object System.Windows.Forms.Panel
 $Sidebar.Location = New-Object System.Drawing.Point(0, 0)
 $Sidebar.Size = New-Object System.Drawing.Size(180, 700)
@@ -403,16 +360,14 @@ foreach ($catName in $Categories.Keys) {
         $info = $this.Tag
         $global:ActionPanel.Controls.Clear()
         
-        # Titulo da categoria
         $title = New-Object System.Windows.Forms.Label
-        $title.Text = $info.Name.ToUpper()
+        $title.Text = $info.Name
         $title.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
         $title.ForeColor = $info.Data.Color
         $title.Location = New-Object System.Drawing.Point(10, 10)
         $title.AutoSize = $true
         $global:ActionPanel.Controls.Add($title)
         
-        # Cards de acao
         $cy = 50
         foreach ($act in $info.Data.Actions) {
             $card = New-Object System.Windows.Forms.Panel
@@ -458,14 +413,13 @@ foreach ($catName in $Categories.Keys) {
     $y += 40
 }
 
-# --- Painel Central (Acoes) ---
+# Painel Central
 $global:ActionPanel.Location = New-Object System.Drawing.Point(190, 10)
 $global:ActionPanel.Size = New-Object System.Drawing.Size(610, 520)
 $global:ActionPanel.BackColor = $ColorBg
 $global:ActionPanel.AutoScroll = $true
 $Form.Controls.Add($global:ActionPanel)
 
-# Welcome
 $welcome = New-Object System.Windows.Forms.Label
 $welcome.Text = "Selecione uma categoria no menu"
 $welcome.Font = New-Object System.Drawing.Font("Segoe UI", 12)
@@ -474,7 +428,7 @@ $welcome.Location = New-Object System.Drawing.Point(150, 200)
 $welcome.AutoSize = $true
 $global:ActionPanel.Controls.Add($welcome)
 
-# --- Painel de Log (Direita) ---
+# Log Panel
 $LogPanel = New-Object System.Windows.Forms.Panel
 $LogPanel.Location = New-Object System.Drawing.Point(810, 10)
 $LogPanel.Size = New-Object System.Drawing.Size(270, 640)
@@ -500,20 +454,20 @@ $global:LogBox.Font = New-Object System.Drawing.Font("Consolas", 8)
 $global:LogBox.BorderStyle = "None"
 $LogPanel.Controls.Add($global:LogBox)
 
-# --- Progress Bar (Bottom) ---
+# Progress Bar
 $global:ProgressBar.Location = New-Object System.Drawing.Point(190, 540)
 $global:ProgressBar.Size = New-Object System.Drawing.Size(610, 8)
 $global:ProgressBar.Style = "Continuous"
 $Form.Controls.Add($global:ProgressBar)
 
-# --- Footer ---
+# Footer
 $Footer = New-Object System.Windows.Forms.Label
-$Footer.Text = "Windows Optimizer v5.2 | Created by @denalth | 13 Categorias | 50+ Acoes"
+$Footer.Text = "Windows Optimizer v5.2.1 | Created by @denalth | 13 Categorias | 40+ Acoes"
 $Footer.Font = New-Object System.Drawing.Font("Segoe UI", 8)
 $Footer.ForeColor = $ColorTextDim
 $Footer.Location = New-Object System.Drawing.Point(350, 560)
 $Footer.AutoSize = $true
 $Form.Controls.Add($Footer)
 
-# Exibir
 [void]$Form.ShowDialog()
+

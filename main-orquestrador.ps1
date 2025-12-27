@@ -180,3 +180,4 @@ Write-Host "`n Obrigado por usar o Otimizador Windows, @denalth!" -ForegroundCol
 
 
 
+
