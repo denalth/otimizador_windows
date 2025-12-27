@@ -1,34 +1,34 @@
 # Autoria: @denalth
-# Windows Optimizer - Versao 4.1 (Native Selection Edition)
+# Windows Optimizer - Versao 5.0 (Safety & Reporting)
 
-O aplicativo de otimizacao definitivo para Windows 11, agora como um **executavel nativo** (.exe) com controle cirurgico e a assinatura de **@denalth**.
+O aplicativo de otimizacao definitivo para Windows 11, agora com **seguranca total** e **diagnosticos inteligentes**.
 
 ---
 
-## 🔥 Novidades da Versao 4.1
+## 🔥 Novidades da Versao 5.0
 
-### Selecao Individual Inteligente
-Agora voce tem controle total sobre o que e instalado ou removido. Todos os modulos criticos permitem que voce escolha itens especificos:
-- **Ferramentas (DevTools)**: Escolha entre VS Code, Git, Docker, etc.
-- **SDKs**: Instale apenas os compiladores que voce precisa.
-- **Bloatwares**: Removam apenas os APPs especificos que voce nao quer.
-- **Servicos**: Desative apenas o que voce julgar desnecessario.
-- **Limpeza**: Selecione as areas de disco (User, System, Cache) para limpar.
+### 🛡️ Sistema de Seguranca (Undo)
+Criamos um escudo protetor para suas acoes:
+- **Backup Automatico**: Chaves do Registro sao salvas antes de alteracoes criticas.
+- **Pontos de Restauracao**: Crie checkpoints do Windows com um clique.
+- **Historico**: Visualize e restaure qualquer backup anterior.
 
-### Aplicativo Nativo (C#)
-O `WindowsOptimizer.exe` e o lancador oficial. Ele e leve (7KB), seguro e abre o motor de otimizacao com um clique.
+### 📊 Diagnostico de Saude
+Saiba o estado do seu sistema antes de otimizar:
+- Espaco em Disco (com alertas para niveis criticos).
+- Uso de RAM e CPU em tempo real.
+- Verificacao de integridade do Windows.
 
-### Seguranca: Gatekeeper @denalth
-O projeto permanece protegido pela palavra-chave **`@denalth`**.
+### 📝 Logs Persistentes
+Toda acao executada pelo otimizador e salva em um arquivo de log datado.
 
 ---
 
 ## 🚀 Como Usar
 
-1. Execute o **`WindowsOptimizer.exe`** para abrir a interface profissional.
-2. Clique em **"LANCAR MOTOR DE OTIMIZACAO"**.
-3. No terminal, digite a senha `@denalth`.
-4. Use os menus numericos para selecionar as melhorias.
+1. Execute o **`WindowsOptimizer.exe`**.
+2. Explore as categorias (Performance, Limpeza, Seguranca, etc.).
+3. Antes de aplicar tweaks, use a aba **Seguranca** para criar um backup.
 
 ---
 
@@ -36,18 +36,13 @@ O projeto permanece protegido pela palavra-chave **`@denalth`**.
 
 ```
 Otimizador Windows/
-├── WindowsOptimizer.exe     # Aplicativo nativo (v4.1)
-├── WindowsOptimizerApp/     # Codigo-fonte C#
-├── main-orquestrador.ps1    # Motor PowerShell v4.1
-├── modules/                 # Modulos funcionais interativos
+├── WindowsOptimizer.exe     # Lancador Nativo v5.0
+├── modules/
+│   ├── backup.ps1           # Sistema de Undo [NOVO]
+│   ├── health.ps1           # Diagnostico de Saude [NOVO]
+│   └── ...
+├── DOCS_PLANNING/
 ├── README.md
 ├── CHANGELOG.MD
-├── LICENSE                  # Licenca Hacker MIT (PT-BR / EN)
-└── version.txt              # 4.1.0
+└── version.txt              # 5.0.0
 ```
-
----
-
-## 🏷️ Autoria e Identidade
-Este projeto e uma obra autoral de **@denalth**. Cada arquivo contém a marcação de autoria para preservar a integridade do código.
-

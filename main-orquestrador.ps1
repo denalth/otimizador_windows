@@ -86,7 +86,7 @@ $moduleFiles = @(
     "utils.ps1", "bloatwares.ps1", "services.ps1", "energy.ps1",
     "visuals.ps1", "wsl2.ps1", "devtools.ps1", "sdks.ps1",
     "cleanup.ps1", "windowsupdate.ps1", "privacy.ps1",
-    "gaming.ps1", "network.ps1", "gui-selector.ps1", "profiles.ps1"
+    "gaming.ps1", "network.ps1", "profiles.ps1", "backup.ps1", "health.ps1"
 )
 
 Write-Host "Carregando modulos..." -ForegroundColor Cyan
@@ -139,6 +139,8 @@ function Show-MainMenu {
     Write-Host " [12] Limpeza do Sistema (Profunda)" -ForegroundColor Magenta
     Write-Host " [13] Atualizacoes do Windows" -ForegroundColor Magenta
     Write-Host " [14] Inicializar Repositorio Git" -ForegroundColor Magenta
+    Write-Host " [15] Backup e Restauracao (Undo)" -ForegroundColor Green
+    Write-Host " [16] Diagnostico de Saude do Sistema" -ForegroundColor Green
     Write-Host " ------------------------------------------------------------" -ForegroundColor DarkGray
     Write-Host "  [0] Sair" -ForegroundColor Red
     Write-Host " ============================================================" -ForegroundColor DarkCyan
@@ -163,7 +165,9 @@ do {
         "11" { if (Get-Command Network-Interactive -ErrorAction SilentlyContinue) { Network-Interactive } }
         "12" { if (Get-Command System-Cleanup-Interactive -ErrorAction SilentlyContinue) { System-Cleanup-Interactive } }
         "13" { if (Get-Command WindowsUpdate-Interactive -ErrorAction SilentlyContinue) { WindowsUpdate-Interactive } }
-        "14" { if (Get-Command Init-GitRepo -ErrorAction SilentlyContinue) { Init-GitRepo -scriptDir $scriptDir } }
+        "14" { if (Get-Command Init-GitRepo -ErrorAction SilentlyContinue) { Init-GitRepo -scriptDir $scriptDir }
+        "15" { if (Get-Command Backup-Interactive -ErrorAction SilentlyContinue) { Backup-Interactive } }
+        "16" { if (Get-Command Health-Interactive -ErrorAction SilentlyContinue) { Health-Interactive } } }
         "0" { break }
     }
     if ($choice -ne "0" -and $choice -ne "") {
@@ -173,5 +177,6 @@ do {
 } while ($choice -ne "0")
 
 Write-Host "`n Obrigado por usar o Otimizador Windows, @denalth!" -ForegroundColor Green
+
 
 
