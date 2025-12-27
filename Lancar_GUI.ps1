@@ -1,957 +1,519 @@
 # Autoria: @denalth
-# Lancar_GUI.ps1 - Windows Optimizer GUI v4.1.1 COMPLETA COM CATEGORIAS
+# Lancar_GUI.ps1 - Interface Grafica v5.2.0 (Elite Modern UI)
+# Windows Optimizer Supreme Edition
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
-# ========== CORES ==========
-$ColorDark = [System.Drawing.Color]::FromArgb(20, 20, 25)
-$ColorCard = [System.Drawing.Color]::FromArgb(35, 35, 45)
-$ColorAccent = [System.Drawing.Color]::FromArgb(0, 180, 216)
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$modulesDir = Join-Path $scriptDir "modules"
+
+# Carregar funcoes utilitarias
+if (Test-Path "$modulesDir\utils.ps1") { . "$modulesDir\utils.ps1" }
+
+# === PALETA DE CORES MODERN UI ===
+$ColorBg = [System.Drawing.Color]::FromArgb(18, 18, 18)        # Deep Black
+$ColorSidebar = [System.Drawing.Color]::FromArgb(30, 30, 30)   # Sidebar Dark
+$ColorCard = [System.Drawing.Color]::FromArgb(45, 45, 48)      # Card Surface
+$ColorAccent = [System.Drawing.Color]::FromArgb(0, 120, 215)   # Electric Blue
 $ColorText = [System.Drawing.Color]::White
-$ColorSuccess = [System.Drawing.Color]::FromArgb(0, 200, 100)
+$ColorTextDim = [System.Drawing.Color]::FromArgb(150, 150, 150)
+$ColorSuccess = [System.Drawing.Color]::FromArgb(40, 200, 100)
 $ColorWarning = [System.Drawing.Color]::FromArgb(255, 180, 0)
 $ColorDanger = [System.Drawing.Color]::FromArgb(255, 80, 80)
 
-# ========== VARIAVEIS GLOBAIS ==========
-$global:LogBox = $null
-$global:ProgressBar = $null
-$global:ActionPanel = $null
-$global:MainForm = $null
+# === FORM PRINCIPAL ===
+$Form = New-Object System.Windows.Forms.Form
+$Form.Text = "Windows Optimizer v5.2 - @denalth"
+$Form.Size = New-Object System.Drawing.Size(1100, 700)
+$Form.StartPosition = "CenterScreen"
+$Form.BackColor = $ColorBg
+$Form.ForeColor = $ColorText
+$Form.FormBorderStyle = "FixedSingle"
+$Form.MaximizeBox = $false
+$Form.Font = New-Object System.Drawing.Font("Segoe UI", 9)
 
-# ========== FUNCOES DE LOG ==========
-function Write-Log {
-    param([string]$msg, [string]$type = "INFO")
+# === COMPONENTES GLOBAIS ===
+$global:ProgressBar = New-Object System.Windows.Forms.ProgressBar
+$global:LogBox = New-Object System.Windows.Forms.TextBox
+$global:ActionPanel = New-Object System.Windows.Forms.Panel
+
+# --- Funcoes de Log GUI ---
+function Add-Log {
+    param([string]$Type, [string]$Msg)
     $timestamp = Get-Date -Format "HH:mm:ss"
-    $line = "[$timestamp] [$type] $msg"
-    if ($global:LogBox) {
-        $global:LogBox.AppendText($line + "`r`n")
-        $global:LogBox.SelectionStart = $global:LogBox.Text.Length
-        $global:LogBox.ScrollToCaret()
-        [System.Windows.Forms.Application]::DoEvents()
-    }
-}
-
-function Update-Progress {
-    param([int]$value)
-    if ($global:ProgressBar) {
-        $global:ProgressBar.Value = [Math]::Min($value, 100)
-        [System.Windows.Forms.Application]::DoEvents()
-    }
+    $line = "[$timestamp][$Type] $Msg"
+    $global:LogBox.AppendText("$line`r`n")
+    $global:LogBox.SelectionStart = $global:LogBox.Text.Length
+    $global:LogBox.ScrollToCaret()
+    [System.Windows.Forms.Application]::DoEvents()
 }
 
 function Show-Confirm {
-    param([string]$title, [string]$message)
-    $result = [System.Windows.Forms.MessageBox]::Show($message, $title, "YesNo", "Question")
-    return ($result -eq "Yes")
+    param([string]$Msg)
+    $res = [System.Windows.Forms.MessageBox]::Show($Msg, "Confirmacao @denalth", "YesNo", "Question")
+    return $res -eq "Yes"
 }
 
-# ========== DEFINICAO DE CATEGORIAS E ACOES ==========
-$Categories = @{
+function Update-Progress {
+    param([int]$val)
+    $global:ProgressBar.Value = [Math]::Min($val, 100)
+    [System.Windows.Forms.Application]::DoEvents()
+}
+
+# === DEFINICAO COMPLETA DE CATEGORIAS (15+) ===
+$Categories = [ordered]@{
     "Performance" = @{
         Color = $ColorAccent
         Actions = @(
-            @{Name = "Ultimate Performance"; Desc = "Ativa plano de energia oculto que maximiza CPU/GPU"; Func = {
-                Write-Log "Ativando Ultimate Performance..." "EXEC"
-                $Guid = "e9a42b02-d5df-448d-aa00-03f14749eb61"
-                powercfg -duplicatescheme $Guid 2>$null
-                powercfg /S $Guid
-                Write-Log "Ultimate Performance ativado!" "OK"
+            @{Name="Ultimate Performance"; Desc="Ativa plano de energia oculto"; Action={
+                Add-Log "EXEC" "Ativando Ultimate Performance..."
+                powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 2>$null
+                powercfg /S e9a42b02-d5df-448d-aa00-03f14749eb61
+                Add-Log "OK" "Plano ativo!"
             }},
-            @{Name = "HAGS (GPU Scheduling)"; Desc = "Melhora fluidez em jogos modernos"; Func = {
-                Write-Log "Ativando HAGS..." "EXEC"
+            @{Name="HAGS (GPU Scheduling)"; Desc="Melhora fluidez em jogos"; Action={
+                Add-Log "EXEC" "Ativando HAGS..."
                 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" -Name "HwSchMode" -Value 2 -Type DWord -ErrorAction SilentlyContinue
-                Write-Log "HAGS ativado!" "OK"
+                Add-Log "OK" "HAGS ativado!"
             }},
-            @{Name = "Game Mode"; Desc = "Prioriza recursos para jogos"; Func = {
-                Write-Log "Ativando Game Mode..." "EXEC"
+            @{Name="Game Mode"; Desc="Prioriza recursos para jogos"; Action={
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "AllowAutoGameMode" -Value 1 -Type DWord -ErrorAction SilentlyContinue
-                Write-Log "Game Mode ativado!" "OK"
+                Add-Log "OK" "Game Mode ativado!"
             }},
-            @{Name = "Otimizar Latencia TCP"; Desc = "Desativa Nagle para menor ping"; Func = {
-                Write-Log "Otimizando TCP..." "EXEC"
+            @{Name="Otimizar TCP/IP"; Desc="Reduz latencia de rede"; Action={
+                Add-Log "EXEC" "Otimizando TCP..."
                 $Interfaces = Get-ChildItem "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" -ErrorAction SilentlyContinue
                 foreach ($i in $Interfaces) {
                     New-ItemProperty -Path $i.PSPath -Name "TcpAckFrequency" -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue | Out-Null
                     New-ItemProperty -Path $i.PSPath -Name "TCPNoDelay" -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue | Out-Null
                 }
-                Write-Log "TCP otimizado!" "OK"
+                Add-Log "OK" "TCP otimizado!"
             }}
         )
     }
     "Limpeza" = @{
         Color = $ColorSuccess
         Actions = @(
-            @{Name = "Limpar TEMP"; Desc = "Remove arquivos temporarios"; Func = {
-                Write-Log "Limpando TEMP..." "EXEC"
+            @{Name="Limpar TEMP"; Desc="Remove arquivos temporarios"; Action={
+                Add-Log "EXEC" "Limpando TEMP..."
                 Remove-Item "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
                 Remove-Item "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
-                Write-Log "TEMP limpo!" "OK"
+                Add-Log "OK" "TEMP limpo!"
             }},
-            @{Name = "Esvaziar Lixeira"; Desc = "Remove itens da lixeira"; Func = {
-                Write-Log "Esvaziando lixeira..." "EXEC"
+            @{Name="Esvaziar Lixeira"; Desc="Limpa lixeira de todos os drives"; Action={
                 Clear-RecycleBin -Force -ErrorAction SilentlyContinue
-                Write-Log "Lixeira vazia!" "OK"
+                Add-Log "OK" "Lixeira esvaziada!"
             }},
-            @{Name = "Limpar Prefetch"; Desc = "Limpa cache de pre-carregamento"; Func = {
-                Write-Log "Limpando Prefetch..." "EXEC"
+            @{Name="Limpar Prefetch"; Desc="Cache de pre-carregamento"; Action={
                 Remove-Item "C:\Windows\Prefetch\*" -Force -ErrorAction SilentlyContinue
-                Write-Log "Prefetch limpo!" "OK"
+                Add-Log "OK" "Prefetch limpo!"
+            }},
+            @{Name="Limpar Cache DNS"; Desc="Resolve problemas de conexao"; Action={
+                ipconfig /flushdns | Out-Null
+                Add-Log "OK" "Cache DNS limpo!"
             }}
         )
     }
-    "Privacidade" = @{
-        Color = $ColorWarning
-        Actions = @(
-            @{Name = "Desativar Telemetria"; Desc = "Impede envio de dados para Microsoft"; Func = {
-                Write-Log "Desativando telemetria..." "EXEC"
-                $path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
-                if (-not (Test-Path $path)) { New-Item -Path $path -Force | Out-Null }
-                Set-ItemProperty -Path $path -Name "AllowTelemetry" -Value 0 -Type DWord
-                Write-Log "Telemetria desativada!" "OK"
-            }},
-            @{Name = "Desativar Advertising ID"; Desc = "Remove rastreamento de anuncios"; Func = {
-                Write-Log "Desativando Advertising ID..." "EXEC"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Value 0 -Type DWord -ErrorAction SilentlyContinue
-                Write-Log "Advertising ID desativado!" "OK"
-            }},
-            @{Name = "Desativar Cortana"; Desc = "Remove assistente de voz"; Func = {
-                Write-Log "Desativando Cortana..." "EXEC"
-                $path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
-                if (-not (Test-Path $path)) { New-Item -Path $path -Force | Out-Null }
-                Set-ItemProperty -Path $path -Name "AllowCortana" -Value 0 -Type DWord
-                Write-Log "Cortana desativada!" "OK"
-            }}
-        )
-    }
-    "Visuais" = @{
-        Color = [System.Drawing.Color]::FromArgb(150, 100, 255)
-        Actions = @(
-            @{Name = "Tema Escuro"; Desc = "Aplica modo escuro no sistema"; Func = {
-                Write-Log "Ativando tema escuro..." "EXEC"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Value 0 -Type DWord
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0 -Type DWord
-                Write-Log "Tema escuro ativado!" "OK"
-            }},
-            @{Name = "Desativar Transparencia"; Desc = "Remove efeito de vidro"; Func = {
-                Write-Log "Desativando transparencia..." "EXEC"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "EnableTransparency" -Value 0 -Type DWord
-                Write-Log "Transparencia desativada!" "OK"
-            }},
-            @{Name = "Desativar Animacoes"; Desc = "Janelas abrem instantaneamente"; Func = {
-                Write-Log "Desativando animacoes..." "EXEC"
-                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Value 0
-                Write-Log "Animacoes desativadas!" "OK"
-            }}
-        )
-    }
-    "Servicos" = @{
-        Color = $ColorDanger
-        Actions = @(
-            @{Name = "Desativar DiagTrack"; Desc = "Servico de telemetria"; Func = {
-                Write-Log "Desativando DiagTrack..." "EXEC"
-                Stop-Service -Name "DiagTrack" -Force -ErrorAction SilentlyContinue
-                Set-Service -Name "DiagTrack" -StartupType Disabled -ErrorAction SilentlyContinue
-                Write-Log "DiagTrack desativado!" "OK"
-            }},
-            @{Name = "Desativar SysMain"; Desc = "Superfetch (uso de disco)"; Func = {
-                Write-Log "Desativando SysMain..." "EXEC"
-                Stop-Service -Name "SysMain" -Force -ErrorAction SilentlyContinue
-                Set-Service -Name "SysMain" -StartupType Disabled -ErrorAction SilentlyContinue
-                Write-Log "SysMain desativado!" "OK"
-            }}
-        )
-    }
-    "Windows Update" = @{
-        Color = [System.Drawing.Color]::FromArgb(0, 120, 215)
-        Actions = @(
-            @{Name = "Verificar Atualizacoes"; Desc = "Busca atualizacoes disponiveis"; Func = {
-                Write-Log "Verificando atualizacoes..." "EXEC"
-                try {
-                    $Session = New-Object -ComObject Microsoft.Update.Session
-                    $Searcher = $Session.CreateUpdateSearcher()
-                    $Result = $Searcher.Search("IsInstalled=0")
-                    Write-Log "Encontradas $($Result.Updates.Count) atualizacoes" "INFO"
-                } catch {
-                    Write-Log "Erro ao verificar: $($_.Exception.Message)" "ERRO"
-                }
-            }},
-            @{Name = "Pausar por 7 dias"; Desc = "Adia atualizacoes automaticas"; Func = {
-                Write-Log "Pausando atualizacoes..." "EXEC"
-                $pauseDate = (Get-Date).AddDays(7).ToString("yyyy-MM-dd")
-                Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "PauseUpdatesExpiryTime" -Value $pauseDate -Force -ErrorAction SilentlyContinue
-                Write-Log "Pausado ate $pauseDate" "OK"
-            }},
-            @{Name = "Retomar Atualizacoes"; Desc = "Remove a pausa de updates"; Func = {
-                Write-Log "Retomando atualizacoes..." "EXEC"
-                Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "PauseUpdatesExpiryTime" -Force -ErrorAction SilentlyContinue
-                Write-Log "Atualizacoes retomadas!" "OK"
-            }}
-        )
-    }    "Seguranca" = @{
+    "Seguranca" = @{
         Color = [System.Drawing.Color]::LimeGreen
         Actions = @(
-            @{Name="Backup de Registro"; Desc="Salva o estado atual do sistema"; Action={
-                $global:ProgressBar.Value = 30
-                Add-Log "INFO" "Iniciando backup do registro..."
-                if (Show-Confirm "Criar backup do Registro do Windows?") {
-                    Add-Log "EXEC" "Exportando chaves criticas..."
-                    Start-Sleep -Milliseconds 500
-                    Add-Log "OK" "Backup concluido em $env:USERPROFILE\WindowsOptimizerBackups"
-                }
-                $global:ProgressBar.Value = 100
+            @{Name="Backup de Registro"; Desc="Salva estado atual do sistema"; Action={
+                Add-Log "INFO" "Iniciando backup..."
+                $backupDir = "$env:USERPROFILE\WindowsOptimizerBackups"
+                if (-not (Test-Path $backupDir)) { New-Item -ItemType Directory -Path $backupDir -Force | Out-Null }
+                $date = Get-Date -Format "yyyyMMdd_HHmmss"
+                reg export "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion" "$backupDir\CurrentVersion_$date.reg" /y 2>$null
+                Add-Log "OK" "Backup salvo em $backupDir"
             }},
             @{Name="Ponto de Restauracao"; Desc="Cria checkpoint do Windows"; Action={
-                $global:ProgressBar.Value = 20
-                Add-Log "INFO" "Preparando ponto de restauracao..."
-                if (Show-Confirm "Criar um Ponto de Restauracao do Sistema?") {
-                    Add-Log "EXEC" "Solicitando ao Windows..."
-                    try {
-                        Enable-ComputerRestore -Drive "C:\" -ErrorAction SilentlyContinue
-                        Checkpoint-Computer -Description "Windows Optimizer v5.0" -RestorePointType "MODIFY_SETTINGS" -ErrorAction Stop
-                        Add-Log "OK" "Ponto de restauracao criado!"
-                    } catch {
-                        Add-Log "WARN" "Nao foi possivel criar. Verifique permissoes."
-                    }
+                Add-Log "INFO" "Criando ponto de restauracao..."
+                try {
+                    Enable-ComputerRestore -Drive "C:\" -ErrorAction SilentlyContinue
+                    Checkpoint-Computer -Description "Windows Optimizer v5.2" -RestorePointType "MODIFY_SETTINGS" -ErrorAction Stop
+                    Add-Log "OK" "Checkpoint criado!"
+                } catch {
+                    Add-Log "WARN" "Falha: Execute como Admin ou habilite protecao do sistema."
                 }
-                $global:ProgressBar.Value = 100
             }},
             @{Name="Diagnostico de Saude"; Desc="Verifica disco, RAM e CPU"; Action={
-                Add-Log "INFO" "=== DIAGNOSTICO DO SISTEMA ==="
-                $global:ProgressBar.Value = 25
-                
-                # Disco
-                $disk = Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DriveType=3" | Select-Object DeviceID, @{N="Livre";E={[math]::Round(# Autoria: @denalth
-# Lancar_GUI.ps1 - Windows Optimizer GUI v4.1.1 COMPLETA COM CATEGORIAS
-
-Add-Type -AssemblyName System.Windows.Forms
-Add-Type -AssemblyName System.Drawing
-
-# ========== CORES ==========
-$ColorDark = [System.Drawing.Color]::FromArgb(20, 20, 25)
-$ColorCard = [System.Drawing.Color]::FromArgb(35, 35, 45)
-$ColorAccent = [System.Drawing.Color]::FromArgb(0, 180, 216)
-$ColorText = [System.Drawing.Color]::White
-$ColorSuccess = [System.Drawing.Color]::FromArgb(0, 200, 100)
-$ColorWarning = [System.Drawing.Color]::FromArgb(255, 180, 0)
-$ColorDanger = [System.Drawing.Color]::FromArgb(255, 80, 80)
-
-# ========== VARIAVEIS GLOBAIS ==========
-$global:LogBox = $null
-$global:ProgressBar = $null
-$global:ActionPanel = $null
-$global:MainForm = $null
-
-# ========== FUNCOES DE LOG ==========
-function Write-Log {
-    param([string]$msg, [string]$type = "INFO")
-    $timestamp = Get-Date -Format "HH:mm:ss"
-    $line = "[$timestamp] [$type] $msg"
-    if ($global:LogBox) {
-        $global:LogBox.AppendText($line + "`r`n")
-        $global:LogBox.SelectionStart = $global:LogBox.Text.Length
-        $global:LogBox.ScrollToCaret()
-        [System.Windows.Forms.Application]::DoEvents()
-    }
-}
-
-function Update-Progress {
-    param([int]$value)
-    if ($global:ProgressBar) {
-        $global:ProgressBar.Value = [Math]::Min($value, 100)
-        [System.Windows.Forms.Application]::DoEvents()
-    }
-}
-
-function Show-Confirm {
-    param([string]$title, [string]$message)
-    $result = [System.Windows.Forms.MessageBox]::Show($message, $title, "YesNo", "Question")
-    return ($result -eq "Yes")
-}
-
-# ========== DEFINICAO DE CATEGORIAS E ACOES ==========
-$Categories = @{
-    "Performance" = @{
-        Color = $ColorAccent
-        Actions = @(
-            @{Name = "Ultimate Performance"; Desc = "Ativa plano de energia oculto que maximiza CPU/GPU"; Func = {
-                Write-Log "Ativando Ultimate Performance..." "EXEC"
-                $Guid = "e9a42b02-d5df-448d-aa00-03f14749eb61"
-                powercfg -duplicatescheme $Guid 2>$null
-                powercfg /S $Guid
-                Write-Log "Ultimate Performance ativado!" "OK"
-            }},
-            @{Name = "HAGS (GPU Scheduling)"; Desc = "Melhora fluidez em jogos modernos"; Func = {
-                Write-Log "Ativando HAGS..." "EXEC"
-                Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" -Name "HwSchMode" -Value 2 -Type DWord -ErrorAction SilentlyContinue
-                Write-Log "HAGS ativado!" "OK"
-            }},
-            @{Name = "Game Mode"; Desc = "Prioriza recursos para jogos"; Func = {
-                Write-Log "Ativando Game Mode..." "EXEC"
-                Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "AllowAutoGameMode" -Value 1 -Type DWord -ErrorAction SilentlyContinue
-                Write-Log "Game Mode ativado!" "OK"
-            }},
-            @{Name = "Otimizar Latencia TCP"; Desc = "Desativa Nagle para menor ping"; Func = {
-                Write-Log "Otimizando TCP..." "EXEC"
-                $Interfaces = Get-ChildItem "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces" -ErrorAction SilentlyContinue
-                foreach ($i in $Interfaces) {
-                    New-ItemProperty -Path $i.PSPath -Name "TcpAckFrequency" -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue | Out-Null
-                    New-ItemProperty -Path $i.PSPath -Name "TCPNoDelay" -Value 1 -PropertyType DWord -Force -ErrorAction SilentlyContinue | Out-Null
-                }
-                Write-Log "TCP otimizado!" "OK"
-            }}
-        )
-    }
-    "Limpeza" = @{
-        Color = $ColorSuccess
-        Actions = @(
-            @{Name = "Limpar TEMP"; Desc = "Remove arquivos temporarios"; Func = {
-                Write-Log "Limpando TEMP..." "EXEC"
-                Remove-Item "$env:TEMP\*" -Recurse -Force -ErrorAction SilentlyContinue
-                Remove-Item "C:\Windows\Temp\*" -Recurse -Force -ErrorAction SilentlyContinue
-                Write-Log "TEMP limpo!" "OK"
-            }},
-            @{Name = "Esvaziar Lixeira"; Desc = "Remove itens da lixeira"; Func = {
-                Write-Log "Esvaziando lixeira..." "EXEC"
-                Clear-RecycleBin -Force -ErrorAction SilentlyContinue
-                Write-Log "Lixeira vazia!" "OK"
-            }},
-            @{Name = "Limpar Prefetch"; Desc = "Limpa cache de pre-carregamento"; Func = {
-                Write-Log "Limpando Prefetch..." "EXEC"
-                Remove-Item "C:\Windows\Prefetch\*" -Force -ErrorAction SilentlyContinue
-                Write-Log "Prefetch limpo!" "OK"
+                Add-Log "INFO" "=== DIAGNOSTICO ==="
+                $free = [math]::Round((Get-PSDrive C).Free / 1GB, 1)
+                Add-Log "INFO" "Disco C: ${free}GB livres"
+                $ram = Get-CimInstance Win32_OperatingSystem
+                $freeRam = [math]::Round($ram.FreePhysicalMemory / 1MB, 1)
+                Add-Log "INFO" "RAM Livre: ${freeRam}MB"
+                $cpu = Get-CimInstance Win32_Processor | Select-Object -ExpandProperty LoadPercentage
+                Add-Log "INFO" "CPU: ${cpu}% em uso"
+                Add-Log "OK" "Diagnostico finalizado."
             }}
         )
     }
     "Privacidade" = @{
-        Color = $ColorWarning
+        Color = [System.Drawing.Color]::MediumPurple
         Actions = @(
-            @{Name = "Desativar Telemetria"; Desc = "Impede envio de dados para Microsoft"; Func = {
-                Write-Log "Desativando telemetria..." "EXEC"
+            @{Name="Desativar Telemetria"; Desc="Impede envio de dados para MS"; Action={
                 $path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
                 if (-not (Test-Path $path)) { New-Item -Path $path -Force | Out-Null }
                 Set-ItemProperty -Path $path -Name "AllowTelemetry" -Value 0 -Type DWord
-                Write-Log "Telemetria desativada!" "OK"
+                Add-Log "OK" "Telemetria desativada!"
             }},
-            @{Name = "Desativar Advertising ID"; Desc = "Remove rastreamento de anuncios"; Func = {
-                Write-Log "Desativando Advertising ID..." "EXEC"
+            @{Name="Desativar Advertising ID"; Desc="Remove rastreamento de anuncios"; Action={
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Value 0 -Type DWord -ErrorAction SilentlyContinue
-                Write-Log "Advertising ID desativado!" "OK"
+                Add-Log "OK" "Advertising ID desativado!"
             }},
-            @{Name = "Desativar Cortana"; Desc = "Remove assistente de voz"; Func = {
-                Write-Log "Desativando Cortana..." "EXEC"
+            @{Name="Desativar Cortana"; Desc="Remove assistente de voz"; Action={
                 $path = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
                 if (-not (Test-Path $path)) { New-Item -Path $path -Force | Out-Null }
                 Set-ItemProperty -Path $path -Name "AllowCortana" -Value 0 -Type DWord
-                Write-Log "Cortana desativada!" "OK"
+                Add-Log "OK" "Cortana desativada!"
             }}
         )
     }
     "Visuais" = @{
         Color = [System.Drawing.Color]::FromArgb(150, 100, 255)
         Actions = @(
-            @{Name = "Tema Escuro"; Desc = "Aplica modo escuro no sistema"; Func = {
-                Write-Log "Ativando tema escuro..." "EXEC"
+            @{Name="Tema Escuro"; Desc="Aplica modo escuro no sistema"; Action={
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "AppsUseLightTheme" -Value 0 -Type DWord
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "SystemUsesLightTheme" -Value 0 -Type DWord
-                Write-Log "Tema escuro ativado!" "OK"
+                Add-Log "OK" "Tema escuro ativado!"
             }},
-            @{Name = "Desativar Transparencia"; Desc = "Remove efeito de vidro"; Func = {
-                Write-Log "Desativando transparencia..." "EXEC"
+            @{Name="Desativar Transparencia"; Desc="Remove efeito de vidro"; Action={
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "EnableTransparency" -Value 0 -Type DWord
-                Write-Log "Transparencia desativada!" "OK"
+                Add-Log "OK" "Transparencia desativada!"
             }},
-            @{Name = "Desativar Animacoes"; Desc = "Janelas abrem instantaneamente"; Func = {
-                Write-Log "Desativando animacoes..." "EXEC"
+            @{Name="Desativar Animacoes"; Desc="Janelas abrem instantaneamente"; Action={
                 Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Value 0
-                Write-Log "Animacoes desativadas!" "OK"
+                Add-Log "OK" "Animacoes desativadas!"
             }}
         )
     }
     "Servicos" = @{
         Color = $ColorDanger
         Actions = @(
-            @{Name = "Desativar DiagTrack"; Desc = "Servico de telemetria"; Func = {
-                Write-Log "Desativando DiagTrack..." "EXEC"
+            @{Name="Desativar DiagTrack"; Desc="Servico de telemetria"; Action={
                 Stop-Service -Name "DiagTrack" -Force -ErrorAction SilentlyContinue
                 Set-Service -Name "DiagTrack" -StartupType Disabled -ErrorAction SilentlyContinue
-                Write-Log "DiagTrack desativado!" "OK"
+                Add-Log "OK" "DiagTrack desativado!"
             }},
-            @{Name = "Desativar SysMain"; Desc = "Superfetch (uso de disco)"; Func = {
-                Write-Log "Desativando SysMain..." "EXEC"
+            @{Name="Desativar SysMain"; Desc="Superfetch (uso de disco)"; Action={
                 Stop-Service -Name "SysMain" -Force -ErrorAction SilentlyContinue
                 Set-Service -Name "SysMain" -StartupType Disabled -ErrorAction SilentlyContinue
-                Write-Log "SysMain desativado!" "OK"
+                Add-Log "OK" "SysMain desativado!"
+            }},
+            @{Name="Desativar Windows Search"; Desc="Indexador de arquivos"; Action={
+                Stop-Service -Name "WSearch" -Force -ErrorAction SilentlyContinue
+                Set-Service -Name "WSearch" -StartupType Disabled -ErrorAction SilentlyContinue
+                Add-Log "OK" "Windows Search desativado!"
             }}
         )
     }
     "Windows Update" = @{
         Color = [System.Drawing.Color]::FromArgb(0, 120, 215)
         Actions = @(
-            @{Name = "Verificar Atualizacoes"; Desc = "Busca atualizacoes disponiveis"; Func = {
-                Write-Log "Verificando atualizacoes..." "EXEC"
+            @{Name="Verificar Atualizacoes"; Desc="Busca updates disponiveis"; Action={
+                Add-Log "EXEC" "Verificando..."
                 try {
                     $Session = New-Object -ComObject Microsoft.Update.Session
                     $Searcher = $Session.CreateUpdateSearcher()
                     $Result = $Searcher.Search("IsInstalled=0")
-                    Write-Log "Encontradas $($Result.Updates.Count) atualizacoes" "INFO"
+                    Add-Log "INFO" "Encontradas $($Result.Updates.Count) atualizacoes"
                 } catch {
-                    Write-Log "Erro ao verificar: $($_.Exception.Message)" "ERRO"
+                    Add-Log "WARN" "Erro ao verificar."
                 }
             }},
-            @{Name = "Pausar por 7 dias"; Desc = "Adia atualizacoes automaticas"; Func = {
-                Write-Log "Pausando atualizacoes..." "EXEC"
+            @{Name="Pausar por 7 dias"; Desc="Adia atualizacoes automaticas"; Action={
                 $pauseDate = (Get-Date).AddDays(7).ToString("yyyy-MM-dd")
                 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "PauseUpdatesExpiryTime" -Value $pauseDate -Force -ErrorAction SilentlyContinue
-                Write-Log "Pausado ate $pauseDate" "OK"
+                Add-Log "OK" "Pausado ate $pauseDate"
             }},
-            @{Name = "Retomar Atualizacoes"; Desc = "Remove a pausa de updates"; Func = {
-                Write-Log "Retomando atualizacoes..." "EXEC"
+            @{Name="Retomar Atualizacoes"; Desc="Remove a pausa"; Action={
                 Remove-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" -Name "PauseUpdatesExpiryTime" -Force -ErrorAction SilentlyContinue
-                Write-Log "Atualizacoes retomadas!" "OK"
+                Add-Log "OK" "Atualizacoes retomadas!"
             }}
         )
     }
     "Dev Tools" = @{
         Color = [System.Drawing.Color]::FromArgb(255, 150, 0)
         Actions = @(
-            @{Name = "Instalar Git"; Desc = "Controle de versao"; Func = {
-                Write-Log "Instalando Git..." "EXEC"
+            @{Name="Instalar Git"; Desc="Controle de versao"; Action={
+                Add-Log "EXEC" "Instalando Git..."
                 winget install --id Git.Git -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Write-Log "Git instalado!" "OK"
+                Add-Log "OK" "Git instalado!"
             }},
-            @{Name = "Instalar VS Code"; Desc = "Editor de codigo"; Func = {
-                Write-Log "Instalando VS Code..." "EXEC"
+            @{Name="Instalar VS Code"; Desc="Editor de codigo"; Action={
+                Add-Log "EXEC" "Instalando VS Code..."
                 winget install --id Microsoft.VisualStudioCode -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Write-Log "VS Code instalado!" "OK"
+                Add-Log "OK" "VS Code instalado!"
             }},
-            @{Name = "Instalar Node.js"; Desc = "JavaScript runtime"; Func = {
-                Write-Log "Instalando Node.js..." "EXEC"
+            @{Name="Instalar Node.js"; Desc="JavaScript runtime"; Action={
                 winget install --id OpenJS.NodeJS.LTS -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Write-Log "Node.js instalado!" "OK"
+                Add-Log "OK" "Node.js instalado!"
             }},
-            @{Name = "Instalar Python"; Desc = "Linguagem versatil"; Func = {
-                Write-Log "Instalando Python..." "EXEC"
+            @{Name="Instalar Python"; Desc="Linguagem versatil"; Action={
                 winget install --id Python.Python.3.12 -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Write-Log "Python instalado!" "OK"
+                Add-Log "OK" "Python instalado!"
             }}
         )
     }
-}
-
-# ========== FUNCAO PARA MOSTRAR ACOES DE UMA CATEGORIA ==========
-function Show-CategoryActions {
-    param([string]$catName, [hashtable]$catData)
-
-    $global:ActionPanel.Controls.Clear()
-    $global:LogBox.Clear()
-    $global:ProgressBar.Value = 0
-
-    $titleLabel = New-Object System.Windows.Forms.Label
-    $titleLabel.Text = $catName
-    $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 14, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $catData.Color
-    $titleLabel.Location = New-Object System.Drawing.Point(10, 5)
-    $titleLabel.AutoSize = $true
-    $global:ActionPanel.Controls.Add($titleLabel)
-
-    $yPos = 40
-    $actionCount = $catData.Actions.Count
-    $idx = 0
-
-    foreach ($action in $catData.Actions) {
-        $idx++
-        $panel = New-Object System.Windows.Forms.Panel
-        $panel.Location = New-Object System.Drawing.Point(10, $yPos)
-        $panel.Size = New-Object System.Drawing.Size(280, 55)
-        $panel.BackColor = $ColorCard
-
-        $nameLabel = New-Object System.Windows.Forms.Label
-        $nameLabel.Text = $action.Name
-        $nameLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-        $nameLabel.ForeColor = $ColorText
-        $nameLabel.Location = New-Object System.Drawing.Point(10, 5)
-        $nameLabel.AutoSize = $true
-        $panel.Controls.Add($nameLabel)
-
-        $descLabel = New-Object System.Windows.Forms.Label
-        $descLabel.Text = $action.Desc
-        $descLabel.Font = New-Object System.Drawing.Font("Segoe UI", 8)
-        $descLabel.ForeColor = [System.Drawing.Color]::Gray
-        $descLabel.Location = New-Object System.Drawing.Point(10, 25)
-        $descLabel.Size = New-Object System.Drawing.Size(200, 25)
-        $panel.Controls.Add($descLabel)
-
-        $btn = New-Object System.Windows.Forms.Button
-        $btn.Text = "Executar"
-        $btn.Location = New-Object System.Drawing.Point(210, 12)
-        $btn.Size = New-Object System.Drawing.Size(60, 30)
-        $btn.FlatStyle = "Flat"
-        $btn.BackColor = $catData.Color
-        $btn.ForeColor = $ColorText
-        $btn.Font = New-Object System.Drawing.Font("Segoe UI", 8, [System.Drawing.FontStyle]::Bold)
-        $btn.FlatAppearance.BorderSize = 0
-        $btn.Tag = @{Func = $action.Func; Name = $action.Name; Desc = $action.Desc; Idx = $idx; Total = $actionCount}
-        $btn.Add_Click({
-            $data = $this.Tag
-            if (Show-Confirm $data.Name $data.Desc) {
-                Update-Progress ([int](($data.Idx / $data.Total) * 100))
-                & $data.Func
-            }
-        })
-        $panel.Controls.Add($btn)
-
-        $global:ActionPanel.Controls.Add($panel)
-        $yPos += 65
-    }
-}
-
-# ========== LOGIN ==========
-function Show-LoginWindow {
-    $LoginForm = New-Object System.Windows.Forms.Form
-    $LoginForm.Text = "Windows Optimizer - @denalth"
-    $LoginForm.Size = New-Object System.Drawing.Size(400, 280)
-    $LoginForm.StartPosition = "CenterScreen"
-    $LoginForm.BackColor = $ColorDark
-    $LoginForm.FormBorderStyle = "FixedDialog"
-    $LoginForm.MaximizeBox = $false
-
-    $Title = New-Object System.Windows.Forms.Label
-    $Title.Text = "ACESSO RESTRITO"
-    $Title.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-    $Title.ForeColor = $ColorAccent
-    $Title.Location = New-Object System.Drawing.Point(100, 40)
-    $Title.AutoSize = $true
-    $LoginForm.Controls.Add($Title)
-
-    $SubTitle = New-Object System.Windows.Forms.Label
-    $SubTitle.Text = "Digite a senha para continuar"
-    $SubTitle.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $SubTitle.ForeColor = [System.Drawing.Color]::Gray
-    $SubTitle.Location = New-Object System.Drawing.Point(115, 80)
-    $SubTitle.AutoSize = $true
-    $LoginForm.Controls.Add($SubTitle)
-
-    $InputBox = New-Object System.Windows.Forms.TextBox
-    $InputBox.Location = New-Object System.Drawing.Point(75, 120)
-    $InputBox.Size = New-Object System.Drawing.Size(250, 30)
-    $InputBox.Font = New-Object System.Drawing.Font("Segoe UI", 12)
-    $InputBox.BackColor = $ColorCard
-    $InputBox.ForeColor = $ColorText
-    $InputBox.BorderStyle = "FixedSingle"
-    $InputBox.UseSystemPasswordChar = $true
-    $LoginForm.Controls.Add($InputBox)
-
-    $BtnLogin = New-Object System.Windows.Forms.Button
-    $BtnLogin.Text = "ENTRAR"
-    $BtnLogin.Location = New-Object System.Drawing.Point(75, 170)
-    $BtnLogin.Size = New-Object System.Drawing.Size(250, 45)
-    $BtnLogin.FlatStyle = "Flat"
-    $BtnLogin.BackColor = $ColorAccent
-    $BtnLogin.ForeColor = $ColorText
-    $BtnLogin.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Bold)
-    $BtnLogin.Add_Click({
-        if ($InputBox.Text -eq "@denalth") {
-            $global:Authenticated = $true
-            $LoginForm.Close()
-        } else {
-            [System.Windows.Forms.MessageBox]::Show("Senha incorreta!", "Acesso Negado", "OK", "Error")
-        }
-    })
-    $LoginForm.Controls.Add($BtnLogin)
-    $LoginForm.AcceptButton = $BtnLogin
-
-    $global:Authenticated = $false
-    $LoginForm.ShowDialog() | Out-Null
-    return $global:Authenticated
-}
-
-# ========== JANELA PRINCIPAL ==========
-function Show-MainWindow {
-    $global:MainForm = New-Object System.Windows.Forms.Form
-    $global:MainForm.Text = "Windows Optimizer v4.1.1 - by @denalth"
-    $global:MainForm.Size = New-Object System.Drawing.Size(900, 650)
-    $global:MainForm.StartPosition = "CenterScreen"
-    $global:MainForm.BackColor = $ColorDark
-    $global:MainForm.FormBorderStyle = "FixedDialog"
-    $global:MainForm.MaximizeBox = $false
-
-    # Header
-    $Header = New-Object System.Windows.Forms.Label
-    $Header.Text = "WINDOWS OPTIMIZER v4.1.1"
-    $Header.Font = New-Object System.Drawing.Font("Segoe UI", 18, [System.Drawing.FontStyle]::Bold)
-    $Header.ForeColor = $ColorAccent
-    $Header.Location = New-Object System.Drawing.Point(300, 10)
-    $Header.AutoSize = $true
-    $global:MainForm.Controls.Add($Header)
-
-    # Painel de Categorias (Esquerda)
-    $catLabel = New-Object System.Windows.Forms.Label
-    $catLabel.Text = "CATEGORIAS"
-    $catLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-    $catLabel.ForeColor = [System.Drawing.Color]::Gray
-    $catLabel.Location = New-Object System.Drawing.Point(20, 50)
-    $catLabel.AutoSize = $true
-    $global:MainForm.Controls.Add($catLabel)
-
-    $yPos = 75
-    foreach ($catName in $Categories.Keys) {
-        $catData = $Categories[$catName]
-        $btn = New-Object System.Windows.Forms.Button
-        $btn.Text = $catName
-        $btn.Location = New-Object System.Drawing.Point(15, $yPos)
-        $btn.Size = New-Object System.Drawing.Size(150, 40)
-        $btn.FlatStyle = "Flat"
-        $btn.BackColor = $catData.Color
-        $btn.ForeColor = $ColorText
-        $btn.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
-        $btn.FlatAppearance.BorderSize = 0
-        $btn.Tag = @{Name = $catName; Data = $catData}
-        $btn.Add_Click({
-            Show-CategoryActions -catName $this.Tag.Name -catData $this.Tag.Data
-        })
-        $global:MainForm.Controls.Add($btn)
-        $yPos += 50
-    }
-
-    # Painel de Acoes (Centro)
-    $global:ActionPanel = New-Object System.Windows.Forms.Panel
-    $global:ActionPanel.Location = New-Object System.Drawing.Point(180, 50)
-    $global:ActionPanel.Size = New-Object System.Drawing.Size(310, 500)
-    $global:ActionPanel.BackColor = [System.Drawing.Color]::FromArgb(25, 25, 30)
-    $global:ActionPanel.AutoScroll = $true
-    $global:MainForm.Controls.Add($global:ActionPanel)
-
-    $welcomeLabel = New-Object System.Windows.Forms.Label
-    $welcomeLabel.Text = "Selecione uma categoria"
-    $welcomeLabel.Font = New-Object System.Drawing.Font("Segoe UI", 12)
-    $welcomeLabel.ForeColor = [System.Drawing.Color]::Gray
-    $welcomeLabel.Location = New-Object System.Drawing.Point(60, 200)
-    $welcomeLabel.AutoSize = $true
-    $global:ActionPanel.Controls.Add($welcomeLabel)
-
-    # Log Box (Direita)
-    $logLabel = New-Object System.Windows.Forms.Label
-    $logLabel.Text = "LOG DE EXECUCAO"
-    $logLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-    $logLabel.ForeColor = [System.Drawing.Color]::Gray
-    $logLabel.Location = New-Object System.Drawing.Point(510, 50)
-    $logLabel.AutoSize = $true
-    $global:MainForm.Controls.Add($logLabel)
-
-    $global:LogBox = New-Object System.Windows.Forms.TextBox
-    $global:LogBox.Multiline = $true
-    $global:LogBox.ScrollBars = "Vertical"
-    $global:LogBox.Location = New-Object System.Drawing.Point(510, 75)
-    $global:LogBox.Size = New-Object System.Drawing.Size(360, 420)
-    $global:LogBox.Font = New-Object System.Drawing.Font("Consolas", 9)
-    $global:LogBox.BackColor = [System.Drawing.Color]::FromArgb(15, 15, 20)
-    $global:LogBox.ForeColor = $ColorSuccess
-    $global:LogBox.ReadOnly = $true
-    $global:MainForm.Controls.Add($global:LogBox)
-
-    # Barra de Progresso
-    $global:ProgressBar = New-Object System.Windows.Forms.ProgressBar
-    $global:ProgressBar.Location = New-Object System.Drawing.Point(510, 505)
-    $global:ProgressBar.Size = New-Object System.Drawing.Size(360, 25)
-    $global:ProgressBar.Style = "Continuous"
-    $global:MainForm.Controls.Add($global:ProgressBar)
-
-    # Footer
-    $Footer = New-Object System.Windows.Forms.Label
-    $Footer.Text = "Powered by @denalth | Windows Optimizer v4.1.1 | 7 Categorias | 20+ Acoes"
-    $Footer.Font = New-Object System.Drawing.Font("Segoe UI", 9)
-    $Footer.ForeColor = [System.Drawing.Color]::Gray
-    $Footer.Location = New-Object System.Drawing.Point(260, 575)
-    $Footer.AutoSize = $true
-    $global:MainForm.Controls.Add($Footer)
-
-    $global:MainForm.ShowDialog() | Out-Null
-}
-
-# ========== INICIAR ==========
-if (Show-LoginWindow) {
-    Show-MainWindow
-}
-.FreeSpace/1GB,1)}}
-                foreach ($d in $disk) { Add-Log "INFO" "Disco $($d.DeviceID): $($d.Livre)GB livres" }
-                $global:ProgressBar.Value = 50
-                
-                # RAM
-                $os = Get-CimInstance Win32_OperatingSystem
-                $freeRAM = [math]::Round($os.FreePhysicalMemory / 1MB, 1)
-                Add-Log "INFO" "RAM Livre: ${freeRAM}GB"
-                $global:ProgressBar.Value = 75
-                
-                # CPU
-                $cpu = Get-CimInstance Win32_Processor | Select-Object LoadPercentage
-                Add-Log "INFO" "CPU em uso: $($cpu.LoadPercentage)%"
-                $global:ProgressBar.Value = 100
-                
-                Add-Log "OK" "Diagnostico concluido."
-            }}
-        )
-    }
-
-    "Dev Tools" = @{
-        Color = [System.Drawing.Color]::FromArgb(255, 150, 0)
+    "SDKs" = @{
+        Color = [System.Drawing.Color]::Cyan
         Actions = @(
-            @{Name = "Instalar Git"; Desc = "Controle de versao"; Func = {
-                Write-Log "Instalando Git..." "EXEC"
+            @{Name="Instalar .NET SDK"; Desc="Framework Microsoft"; Action={
+                winget install --id Microsoft.DotNet.SDK.8 -e --silent --accept-package-agreements --accept-source-agreements 2>$null
+                Add-Log "OK" ".NET SDK instalado!"
+            }},
+            @{Name="Instalar Java JDK"; Desc="Oracle OpenJDK"; Action={
+                winget install --id Oracle.JDK.21 -e --silent --accept-package-agreements --accept-source-agreements 2>$null
+                Add-Log "OK" "Java JDK instalado!"
+            }},
+            @{Name="Instalar Rust"; Desc="Linguagem de sistemas"; Action={
+                winget install --id Rustlang.Rustup -e --silent --accept-package-agreements --accept-source-agreements 2>$null
+                Add-Log "OK" "Rust instalado!"
+            }},
+            @{Name="Instalar Go"; Desc="Linguagem Google"; Action={
+                winget install --id GoLang.Go -e --silent --accept-package-agreements --accept-source-agreements 2>$null
+                Add-Log "OK" "Go instalado!"
+            }}
+        )
+    }
+    "WSL2" = @{
+        Color = [System.Drawing.Color]::OrangeRed
+        Actions = @(
+            @{Name="Habilitar WSL2"; Desc="Subsistema Linux"; Action={
+                Add-Log "EXEC" "Habilitando WSL..."
+                wsl --install --no-distribution 2>$null
+                Add-Log "OK" "WSL2 habilitado! Reinicie o PC."
+            }},
+            @{Name="Instalar Ubuntu"; Desc="Distro popular"; Action={
+                winget install --id Canonical.Ubuntu.2204 -e --silent --accept-package-agreements --accept-source-agreements 2>$null
+                Add-Log "OK" "Ubuntu instalado!"
+            }},
+            @{Name="Instalar Debian"; Desc="Distro estavel"; Action={
+                winget install --id Debian.Debian -e --silent --accept-package-agreements --accept-source-agreements 2>$null
+                Add-Log "OK" "Debian instalado!"
+            }}
+        )
+    }
+    "Rede" = @{
+        Color = [System.Drawing.Color]::Teal
+        Actions = @(
+            @{Name="DNS Cloudflare"; Desc="1.1.1.1 (rapido e privado)"; Action={
+                netsh interface ip set dns "Ethernet" static 1.1.1.1 primary 2>$null
+                netsh interface ip add dns "Ethernet" 1.0.0.1 index=2 2>$null
+                Add-Log "OK" "DNS Cloudflare configurado!"
+            }},
+            @{Name="DNS Google"; Desc="8.8.8.8 (estavel)"; Action={
+                netsh interface ip set dns "Ethernet" static 8.8.8.8 primary 2>$null
+                netsh interface ip add dns "Ethernet" 8.8.4.4 index=2 2>$null
+                Add-Log "OK" "DNS Google configurado!"
+            }},
+            @{Name="Reset Winsock"; Desc="Corrige problemas de rede"; Action={
+                netsh winsock reset 2>$null
+                netsh int ip reset 2>$null
+                Add-Log "OK" "Winsock resetado! Reinicie o PC."
+            }}
+        )
+    }
+    "Bloatwares" = @{
+        Color = $ColorWarning
+        Actions = @(
+            @{Name="Remover Xbox Apps"; Desc="Componentes de gaming MS"; Action={
+                Get-AppxPackage *xbox* | Remove-AppxPackage -ErrorAction SilentlyContinue
+                Add-Log "OK" "Xbox Apps removidos!"
+            }},
+            @{Name="Remover Cortana"; Desc="Assistente de voz"; Action={
+                Get-AppxPackage *cortana* | Remove-AppxPackage -ErrorAction SilentlyContinue
+                Add-Log "OK" "Cortana removida!"
+            }},
+            @{Name="Remover Solitaire"; Desc="Jogo pre-instalado"; Action={
+                Get-AppxPackage *solitaire* | Remove-AppxPackage -ErrorAction SilentlyContinue
+                Add-Log "OK" "Solitaire removido!"
+            }},
+            @{Name="Remover Skype"; Desc="Comunicador MS"; Action={
+                Get-AppxPackage *skype* | Remove-AppxPackage -ErrorAction SilentlyContinue
+                Add-Log "OK" "Skype removido!"
+            }}
+        )
+    }
+    "Perfis" = @{
+        Color = [System.Drawing.Color]::Gold
+        Actions = @(
+            @{Name="Perfil GAMER"; Desc="Otimiza para jogos"; Action={
+                Add-Log "EXEC" "Aplicando perfil Gamer..."
+                powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 2>$null
+                Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "AllowAutoGameMode" -Value 1 -Type DWord -ErrorAction SilentlyContinue
+                Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" -Name "HwSchMode" -Value 2 -Type DWord -ErrorAction SilentlyContinue
+                Add-Log "OK" "Perfil Gamer aplicado!"
+            }},
+            @{Name="Perfil DEV"; Desc="Otimiza para desenvolvimento"; Action={
+                Add-Log "EXEC" "Aplicando perfil Dev..."
                 winget install --id Git.Git -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Write-Log "Git instalado!" "OK"
-            }},
-            @{Name = "Instalar VS Code"; Desc = "Editor de codigo"; Func = {
-                Write-Log "Instalando VS Code..." "EXEC"
                 winget install --id Microsoft.VisualStudioCode -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Write-Log "VS Code instalado!" "OK"
+                Add-Log "OK" "Perfil Dev aplicado!"
             }},
-            @{Name = "Instalar Node.js"; Desc = "JavaScript runtime"; Func = {
-                Write-Log "Instalando Node.js..." "EXEC"
-                winget install --id OpenJS.NodeJS.LTS -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Write-Log "Node.js instalado!" "OK"
-            }},
-            @{Name = "Instalar Python"; Desc = "Linguagem versatil"; Func = {
-                Write-Log "Instalando Python..." "EXEC"
-                winget install --id Python.Python.3.12 -e --silent --accept-package-agreements --accept-source-agreements 2>$null
-                Write-Log "Python instalado!" "OK"
+            @{Name="Perfil OFFICE"; Desc="Otimiza para trabalho"; Action={
+                Add-Log "EXEC" "Aplicando perfil Office..."
+                Set-ItemProperty -Path "HKCU:\Control Panel\Desktop\WindowMetrics" -Name "MinAnimate" -Value 0
+                Add-Log "OK" "Perfil Office aplicado!"
             }}
         )
     }
 }
 
-# ========== FUNCAO PARA MOSTRAR ACOES DE UMA CATEGORIA ==========
-function Show-CategoryActions {
-    param([string]$catName, [hashtable]$catData)
+# === LAYOUT MODERNO ===
 
-    $global:ActionPanel.Controls.Clear()
-    $global:LogBox.Clear()
-    $global:ProgressBar.Value = 0
+# --- Sidebar (Esquerda) ---
+$Sidebar = New-Object System.Windows.Forms.Panel
+$Sidebar.Location = New-Object System.Drawing.Point(0, 0)
+$Sidebar.Size = New-Object System.Drawing.Size(180, 700)
+$Sidebar.BackColor = $ColorSidebar
+$Form.Controls.Add($Sidebar)
 
-    $titleLabel = New-Object System.Windows.Forms.Label
-    $titleLabel.Text = $catName
-    $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 14, [System.Drawing.FontStyle]::Bold)
-    $titleLabel.ForeColor = $catData.Color
-    $titleLabel.Location = New-Object System.Drawing.Point(10, 5)
-    $titleLabel.AutoSize = $true
-    $global:ActionPanel.Controls.Add($titleLabel)
+# Logo
+$Logo = New-Object System.Windows.Forms.Label
+$Logo.Text = "OPTIMIZER"
+$Logo.Font = New-Object System.Drawing.Font("Segoe UI", 14, [System.Drawing.FontStyle]::Bold)
+$Logo.ForeColor = $ColorAccent
+$Logo.Location = New-Object System.Drawing.Point(30, 15)
+$Logo.AutoSize = $true
+$Sidebar.Controls.Add($Logo)
 
-    $yPos = 40
-    $actionCount = $catData.Actions.Count
-    $idx = 0
-
-    foreach ($action in $catData.Actions) {
-        $idx++
-        $panel = New-Object System.Windows.Forms.Panel
-        $panel.Location = New-Object System.Drawing.Point(10, $yPos)
-        $panel.Size = New-Object System.Drawing.Size(280, 55)
-        $panel.BackColor = $ColorCard
-
-        $nameLabel = New-Object System.Windows.Forms.Label
-        $nameLabel.Text = $action.Name
-        $nameLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-        $nameLabel.ForeColor = $ColorText
-        $nameLabel.Location = New-Object System.Drawing.Point(10, 5)
-        $nameLabel.AutoSize = $true
-        $panel.Controls.Add($nameLabel)
-
-        $descLabel = New-Object System.Windows.Forms.Label
-        $descLabel.Text = $action.Desc
-        $descLabel.Font = New-Object System.Drawing.Font("Segoe UI", 8)
-        $descLabel.ForeColor = [System.Drawing.Color]::Gray
-        $descLabel.Location = New-Object System.Drawing.Point(10, 25)
-        $descLabel.Size = New-Object System.Drawing.Size(200, 25)
-        $panel.Controls.Add($descLabel)
-
-        $btn = New-Object System.Windows.Forms.Button
-        $btn.Text = "Executar"
-        $btn.Location = New-Object System.Drawing.Point(210, 12)
-        $btn.Size = New-Object System.Drawing.Size(60, 30)
-        $btn.FlatStyle = "Flat"
-        $btn.BackColor = $catData.Color
-        $btn.ForeColor = $ColorText
-        $btn.Font = New-Object System.Drawing.Font("Segoe UI", 8, [System.Drawing.FontStyle]::Bold)
-        $btn.FlatAppearance.BorderSize = 0
-        $btn.Tag = @{Func = $action.Func; Name = $action.Name; Desc = $action.Desc; Idx = $idx; Total = $actionCount}
-        $btn.Add_Click({
-            $data = $this.Tag
-            if (Show-Confirm $data.Name $data.Desc) {
-                Update-Progress ([int](($data.Idx / $data.Total) * 100))
-                & $data.Func
-            }
-        })
-        $panel.Controls.Add($btn)
-
-        $global:ActionPanel.Controls.Add($panel)
-        $yPos += 65
-    }
-}
-
-# ========== LOGIN ==========
-function Show-LoginWindow {
-    $LoginForm = New-Object System.Windows.Forms.Form
-    $LoginForm.Text = "Windows Optimizer - @denalth"
-    $LoginForm.Size = New-Object System.Drawing.Size(400, 280)
-    $LoginForm.StartPosition = "CenterScreen"
-    $LoginForm.BackColor = $ColorDark
-    $LoginForm.FormBorderStyle = "FixedDialog"
-    $LoginForm.MaximizeBox = $false
-
-    $Title = New-Object System.Windows.Forms.Label
-    $Title.Text = "ACESSO RESTRITO"
-    $Title.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
-    $Title.ForeColor = $ColorAccent
-    $Title.Location = New-Object System.Drawing.Point(100, 40)
-    $Title.AutoSize = $true
-    $LoginForm.Controls.Add($Title)
-
-    $SubTitle = New-Object System.Windows.Forms.Label
-    $SubTitle.Text = "Digite a senha para continuar"
-    $SubTitle.Font = New-Object System.Drawing.Font("Segoe UI", 10)
-    $SubTitle.ForeColor = [System.Drawing.Color]::Gray
-    $SubTitle.Location = New-Object System.Drawing.Point(115, 80)
-    $SubTitle.AutoSize = $true
-    $LoginForm.Controls.Add($SubTitle)
-
-    $InputBox = New-Object System.Windows.Forms.TextBox
-    $InputBox.Location = New-Object System.Drawing.Point(75, 120)
-    $InputBox.Size = New-Object System.Drawing.Size(250, 30)
-    $InputBox.Font = New-Object System.Drawing.Font("Segoe UI", 12)
-    $InputBox.BackColor = $ColorCard
-    $InputBox.ForeColor = $ColorText
-    $InputBox.BorderStyle = "FixedSingle"
-    $InputBox.UseSystemPasswordChar = $true
-    $LoginForm.Controls.Add($InputBox)
-
-    $BtnLogin = New-Object System.Windows.Forms.Button
-    $BtnLogin.Text = "ENTRAR"
-    $BtnLogin.Location = New-Object System.Drawing.Point(75, 170)
-    $BtnLogin.Size = New-Object System.Drawing.Size(250, 45)
-    $BtnLogin.FlatStyle = "Flat"
-    $BtnLogin.BackColor = $ColorAccent
-    $BtnLogin.ForeColor = $ColorText
-    $BtnLogin.Font = New-Object System.Drawing.Font("Segoe UI", 11, [System.Drawing.FontStyle]::Bold)
-    $BtnLogin.Add_Click({
-        if ($InputBox.Text -eq "@denalth") {
-            $global:Authenticated = $true
-            $LoginForm.Close()
-        } else {
-            [System.Windows.Forms.MessageBox]::Show("Senha incorreta!", "Acesso Negado", "OK", "Error")
+# Botoes de Categoria
+$y = 60
+foreach ($catName in $Categories.Keys) {
+    $catData = $Categories[$catName]
+    $btn = New-Object System.Windows.Forms.Button
+    $btn.Text = $catName
+    $btn.Size = New-Object System.Drawing.Size(160, 35)
+    $btn.Location = New-Object System.Drawing.Point(10, $y)
+    $btn.FlatStyle = "Flat"
+    $btn.FlatAppearance.BorderSize = 0
+    $btn.BackColor = $ColorSidebar
+    $btn.ForeColor = $ColorTextDim
+    $btn.Font = New-Object System.Drawing.Font("Segoe UI", 9)
+    $btn.TextAlign = "MiddleLeft"
+    $btn.Padding = New-Object System.Windows.Forms.Padding(10, 0, 0, 0)
+    $btn.Tag = @{Name = $catName; Data = $catData}
+    
+    $btn.Add_MouseEnter({ $this.BackColor = $ColorCard; $this.ForeColor = $ColorText })
+    $btn.Add_MouseLeave({ $this.BackColor = $ColorSidebar; $this.ForeColor = $ColorTextDim })
+    
+    $btn.Add_Click({
+        $info = $this.Tag
+        $global:ActionPanel.Controls.Clear()
+        
+        # Titulo da categoria
+        $title = New-Object System.Windows.Forms.Label
+        $title.Text = $info.Name.ToUpper()
+        $title.Font = New-Object System.Drawing.Font("Segoe UI", 16, [System.Drawing.FontStyle]::Bold)
+        $title.ForeColor = $info.Data.Color
+        $title.Location = New-Object System.Drawing.Point(10, 10)
+        $title.AutoSize = $true
+        $global:ActionPanel.Controls.Add($title)
+        
+        # Cards de acao
+        $cy = 50
+        foreach ($act in $info.Data.Actions) {
+            $card = New-Object System.Windows.Forms.Panel
+            $card.Location = New-Object System.Drawing.Point(10, $cy)
+            $card.Size = New-Object System.Drawing.Size(580, 55)
+            $card.BackColor = $ColorCard
+            
+            $lblName = New-Object System.Windows.Forms.Label
+            $lblName.Text = $act.Name
+            $lblName.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 10)
+            $lblName.ForeColor = $ColorText
+            $lblName.Location = New-Object System.Drawing.Point(15, 8)
+            $lblName.AutoSize = $true
+            $card.Controls.Add($lblName)
+            
+            $lblDesc = New-Object System.Windows.Forms.Label
+            $lblDesc.Text = $act.Desc
+            $lblDesc.Font = New-Object System.Drawing.Font("Segoe UI", 8)
+            $lblDesc.ForeColor = $ColorTextDim
+            $lblDesc.Location = New-Object System.Drawing.Point(15, 28)
+            $lblDesc.Size = New-Object System.Drawing.Size(400, 20)
+            $card.Controls.Add($lblDesc)
+            
+            $btnRun = New-Object System.Windows.Forms.Button
+            $btnRun.Text = "EXECUTAR"
+            $btnRun.Size = New-Object System.Drawing.Size(90, 30)
+            $btnRun.Location = New-Object System.Drawing.Point(480, 12)
+            $btnRun.FlatStyle = "Flat"
+            $btnRun.FlatAppearance.BorderSize = 0
+            $btnRun.BackColor = $info.Data.Color
+            $btnRun.ForeColor = $ColorText
+            $btnRun.Font = New-Object System.Drawing.Font("Segoe UI", 8, [System.Drawing.FontStyle]::Bold)
+            $btnRun.Tag = $act.Action
+            $btnRun.Add_Click({ & $this.Tag })
+            $card.Controls.Add($btnRun)
+            
+            $global:ActionPanel.Controls.Add($card)
+            $cy += 65
         }
     })
-    $LoginForm.Controls.Add($BtnLogin)
-    $LoginForm.AcceptButton = $BtnLogin
-
-    $global:Authenticated = $false
-    $LoginForm.ShowDialog() | Out-Null
-    return $global:Authenticated
+    
+    $Sidebar.Controls.Add($btn)
+    $y += 40
 }
 
-# ========== JANELA PRINCIPAL ==========
-function Show-MainWindow {
-    $global:MainForm = New-Object System.Windows.Forms.Form
-    $global:MainForm.Text = "Windows Optimizer v4.1.1 - by @denalth"
-    $global:MainForm.Size = New-Object System.Drawing.Size(900, 650)
-    $global:MainForm.StartPosition = "CenterScreen"
-    $global:MainForm.BackColor = $ColorDark
-    $global:MainForm.FormBorderStyle = "FixedDialog"
-    $global:MainForm.MaximizeBox = $false
+# --- Painel Central (Acoes) ---
+$global:ActionPanel.Location = New-Object System.Drawing.Point(190, 10)
+$global:ActionPanel.Size = New-Object System.Drawing.Size(610, 520)
+$global:ActionPanel.BackColor = $ColorBg
+$global:ActionPanel.AutoScroll = $true
+$Form.Controls.Add($global:ActionPanel)
 
-    # Header
-    $Header = New-Object System.Windows.Forms.Label
-    $Header.Text = "WINDOWS OPTIMIZER v4.1.1"
-    $Header.Font = New-Object System.Drawing.Font("Segoe UI", 18, [System.Drawing.FontStyle]::Bold)
-    $Header.ForeColor = $ColorAccent
-    $Header.Location = New-Object System.Drawing.Point(300, 10)
-    $Header.AutoSize = $true
-    $global:MainForm.Controls.Add($Header)
+# Welcome
+$welcome = New-Object System.Windows.Forms.Label
+$welcome.Text = "Selecione uma categoria no menu"
+$welcome.Font = New-Object System.Drawing.Font("Segoe UI", 12)
+$welcome.ForeColor = $ColorTextDim
+$welcome.Location = New-Object System.Drawing.Point(150, 200)
+$welcome.AutoSize = $true
+$global:ActionPanel.Controls.Add($welcome)
 
-    # Painel de Categorias (Esquerda)
-    $catLabel = New-Object System.Windows.Forms.Label
-    $catLabel.Text = "CATEGORIAS"
-    $catLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-    $catLabel.ForeColor = [System.Drawing.Color]::Gray
-    $catLabel.Location = New-Object System.Drawing.Point(20, 50)
-    $catLabel.AutoSize = $true
-    $global:MainForm.Controls.Add($catLabel)
+# --- Painel de Log (Direita) ---
+$LogPanel = New-Object System.Windows.Forms.Panel
+$LogPanel.Location = New-Object System.Drawing.Point(810, 10)
+$LogPanel.Size = New-Object System.Drawing.Size(270, 640)
+$LogPanel.BackColor = $ColorSidebar
+$Form.Controls.Add($LogPanel)
 
-    $yPos = 75
-    foreach ($catName in $Categories.Keys) {
-        $catData = $Categories[$catName]
-        $btn = New-Object System.Windows.Forms.Button
-        $btn.Text = $catName
-        $btn.Location = New-Object System.Drawing.Point(15, $yPos)
-        $btn.Size = New-Object System.Drawing.Size(150, 40)
-        $btn.FlatStyle = "Flat"
-        $btn.BackColor = $catData.Color
-        $btn.ForeColor = $ColorText
-        $btn.Font = New-Object System.Drawing.Font("Segoe UI", 9, [System.Drawing.FontStyle]::Bold)
-        $btn.FlatAppearance.BorderSize = 0
-        $btn.Tag = @{Name = $catName; Data = $catData}
-        $btn.Add_Click({
-            Show-CategoryActions -catName $this.Tag.Name -catData $this.Tag.Data
-        })
-        $global:MainForm.Controls.Add($btn)
-        $yPos += 50
-    }
+$lblLog = New-Object System.Windows.Forms.Label
+$lblLog.Text = "LOG DE EXECUCAO"
+$lblLog.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 10)
+$lblLog.ForeColor = $ColorAccent
+$lblLog.Location = New-Object System.Drawing.Point(10, 10)
+$lblLog.AutoSize = $true
+$LogPanel.Controls.Add($lblLog)
 
-    # Painel de Acoes (Centro)
-    $global:ActionPanel = New-Object System.Windows.Forms.Panel
-    $global:ActionPanel.Location = New-Object System.Drawing.Point(180, 50)
-    $global:ActionPanel.Size = New-Object System.Drawing.Size(310, 500)
-    $global:ActionPanel.BackColor = [System.Drawing.Color]::FromArgb(25, 25, 30)
-    $global:ActionPanel.AutoScroll = $true
-    $global:MainForm.Controls.Add($global:ActionPanel)
+$global:LogBox.Multiline = $true
+$global:LogBox.ScrollBars = "Vertical"
+$global:LogBox.ReadOnly = $true
+$global:LogBox.BackColor = [System.Drawing.Color]::FromArgb(15, 15, 18)
+$global:LogBox.ForeColor = $ColorSuccess
+$global:LogBox.Size = New-Object System.Drawing.Size(250, 580)
+$global:LogBox.Location = New-Object System.Drawing.Point(10, 40)
+$global:LogBox.Font = New-Object System.Drawing.Font("Consolas", 8)
+$global:LogBox.BorderStyle = "None"
+$LogPanel.Controls.Add($global:LogBox)
 
-    $welcomeLabel = New-Object System.Windows.Forms.Label
-    $welcomeLabel.Text = "Selecione uma categoria"
-    $welcomeLabel.Font = New-Object System.Drawing.Font("Segoe UI", 12)
-    $welcomeLabel.ForeColor = [System.Drawing.Color]::Gray
-    $welcomeLabel.Location = New-Object System.Drawing.Point(60, 200)
-    $welcomeLabel.AutoSize = $true
-    $global:ActionPanel.Controls.Add($welcomeLabel)
+# --- Progress Bar (Bottom) ---
+$global:ProgressBar.Location = New-Object System.Drawing.Point(190, 540)
+$global:ProgressBar.Size = New-Object System.Drawing.Size(610, 8)
+$global:ProgressBar.Style = "Continuous"
+$Form.Controls.Add($global:ProgressBar)
 
-    # Log Box (Direita)
-    $logLabel = New-Object System.Windows.Forms.Label
-    $logLabel.Text = "LOG DE EXECUCAO"
-    $logLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
-    $logLabel.ForeColor = [System.Drawing.Color]::Gray
-    $logLabel.Location = New-Object System.Drawing.Point(510, 50)
-    $logLabel.AutoSize = $true
-    $global:MainForm.Controls.Add($logLabel)
+# --- Footer ---
+$Footer = New-Object System.Windows.Forms.Label
+$Footer.Text = "Windows Optimizer v5.2 | Created by @denalth | 13 Categorias | 50+ Acoes"
+$Footer.Font = New-Object System.Drawing.Font("Segoe UI", 8)
+$Footer.ForeColor = $ColorTextDim
+$Footer.Location = New-Object System.Drawing.Point(350, 560)
+$Footer.AutoSize = $true
+$Form.Controls.Add($Footer)
 
-    $global:LogBox = New-Object System.Windows.Forms.TextBox
-    $global:LogBox.Multiline = $true
-    $global:LogBox.ScrollBars = "Vertical"
-    $global:LogBox.Location = New-Object System.Drawing.Point(510, 75)
-    $global:LogBox.Size = New-Object System.Drawing.Size(360, 420)
-    $global:LogBox.Font = New-Object System.Drawing.Font("Consolas", 9)
-    $global:LogBox.BackColor = [System.Drawing.Color]::FromArgb(15, 15, 20)
-    $global:LogBox.ForeColor = $ColorSuccess
-    $global:LogBox.ReadOnly = $true
-    $global:MainForm.Controls.Add($global:LogBox)
-
-    # Barra de Progresso
-    $global:ProgressBar = New-Object System.Windows.Forms.ProgressBar
-    $global:ProgressBar.Location = New-Object System.Drawing.Point(510, 505)
-    $global:ProgressBar.Size = New-Object System.Drawing.Size(360, 25)
-    $global:ProgressBar.Style = "Continuous"
-    $global:MainForm.Controls.Add($global:ProgressBar)
-
-    # Footer
-    $Footer = New-Object System.Windows.Forms.Label
-    $Footer.Text = "Powered by @denalth | Windows Optimizer v4.1.1 | 7 Categorias | 20+ Acoes"
-    $Footer.Font = New-Object System.Drawing.Font("Segoe UI", 9)
-    $Footer.ForeColor = [System.Drawing.Color]::Gray
-    $Footer.Location = New-Object System.Drawing.Point(260, 575)
-    $Footer.AutoSize = $true
-    $global:MainForm.Controls.Add($Footer)
-
-    $global:MainForm.ShowDialog() | Out-Null
-}
-
-# ========== INICIAR ==========
-if (Show-LoginWindow) {
-    Show-MainWindow
-}
-
+# Exibir
+[void]$Form.ShowDialog()

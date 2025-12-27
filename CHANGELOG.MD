@@ -3,19 +3,26 @@
 
 ---
 
-## [5.1.0] - 2025-12-27 (Visual Polish)
+## [5.2.0] - 2025-12-27 (Elite Modern UI)
 
-### 🎨 Melhorias Visuais
-- **Splash Screen**: Tela de carregamento animada com logo, versao e barra de progresso.
-- **UI Refinada**: Transicao suave entre splash e janela principal.
+### 🎨 Redesign Completo
+- **Visual Flat Dark**: Interface moderna sem bordas 3D, cores solidas e acentos vibrantes.
+- **Paleta Dark Theme**: Background #121212, Sidebar #1E1E1E, Accent #0078D4.
+- **Fontes Premium**: Segoe UI (Semibold para titulos, Regular para descricoes).
+- **Hover Effects**: Botoes mudam de cor ao passar o mouse.
+
+### 🔧 Restauracao Total
+- **13 Categorias**: Performance, Limpeza, Seguranca, Privacidade, Visuais, Servicos, Windows Update, Dev Tools, SDKs, WSL2, Rede, Bloatwares, Perfis.
+- **50+ Acoes**: Todas as funcionalidades dos 15+ modulos disponiveis via GUI.
+
+### 🛠️ Estabilidade
+- Corrigido erro de sintaxe [ordered].
+- Modo de depuracao removido do executavel.
 
 ---
 
-## [5.0.0] - 2025-12-27
-- Sistema de Backup/Undo, Diagnostico de Saude, Logs Persistentes.
+## [5.1.2] - 2025-12-27
+- Hotfix de sintaxe GUI.
 
-## [4.1.1] - 2025-12-27
-- Auditoria Elite Clean, remocao de legados.
-
-## [4.0.0] - 2025-12-26
-- Evolucao para C# Nativo.
+## [5.1.0] - 2025-12-27
+- Splash Screen.

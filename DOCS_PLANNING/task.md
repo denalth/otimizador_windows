@@ -8,9 +8,10 @@
 - [x] Auditoria Elite Clean
 - [x] Sistema de Seguranca e Relatorios
 - [x] Splash Screen Animada (v5.1)
+- [x] Hotfix GUI: Correcao de Sintaxe Critica (v5.1.1)
 
 ## Planejado para Futuro (v6.0+)
 - [ ] Icone customizado no .exe
 - [ ] Self-Update (verificacao de novas versoes)
 
-**STATUS FINAL: PRODUTO v5.1.0 COMPLETO**
+**STATUS FINAL: PRODUTO RELICADO v5.1.1**
