@@ -1,6 +1,6 @@
 // Autoria: @denalth
-// Program.cs - Windows Optimizer v5.2.1
-// Aplicativo nativo C# com Terminal Oculto
+// Program.cs - Windows Optimizer v5.4.0
+// Aplicativo nativo C# com Caminhos Dinamicos (Portabilidade)
 
 using System;
 using System.Drawing;
@@ -26,7 +26,7 @@ class SplashScreen : Form
         this.BackColor = Color.FromArgb(18, 18, 18);
 
         lblTitle = new Label { Text = "WINDOWS OPTIMIZER", Font = new Font("Segoe UI", 22, FontStyle.Bold), ForeColor = Color.White, AutoSize = true, Location = new Point(50, 50) };
-        lblVersion = new Label { Text = "v5.2.1 by @denalth", Font = new Font("Segoe UI", 10, FontStyle.Italic), ForeColor = Color.FromArgb(0, 120, 215), AutoSize = true, Location = new Point(130, 95) };
+        lblVersion = new Label { Text = "v5.4.0 by @denalth", Font = new Font("Segoe UI", 10, FontStyle.Italic), ForeColor = Color.FromArgb(0, 120, 215), AutoSize = true, Location = new Point(130, 95) };
         lblLoading = new Label { Text = "Carregando modulos...", Font = new Font("Segoe UI", 9), ForeColor = Color.Gray, AutoSize = true, Location = new Point(135, 150) };
         progressBar = new ProgressBar { Location = new Point(50, 180), Size = new Size(300, 20), Style = ProgressBarStyle.Continuous, Value = 0 };
 
@@ -49,7 +49,7 @@ class MainForm : Form
 {
     public MainForm()
     {
-        this.Text = "Windows Optimizer v5.2.1";
+        this.Text = "Windows Optimizer v5.4.0";
         this.Size = new Size(450, 350);
         this.StartPosition = FormStartPosition.CenterScreen;
         this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -61,8 +61,8 @@ class MainForm : Form
 
         Button btnStart = new Button {
             Text = "ABRIR INTERFACE DE OTIMIZACAO",
-            Size = new Size(350, 60),
-            Location = new Point(50, 150),
+            Size = new Size(350, 100),
+            Location = new Point(50, 130),
             FlatStyle = FlatStyle.Flat,
             BackColor = Color.FromArgb(0, 120, 215),
             ForeColor = Color.White,
@@ -73,32 +73,34 @@ class MainForm : Form
         btnStart.Click += btnStart_Click;
         this.Controls.Add(btnStart);
 
-        Label lblFooter = new Label { Text = "Powered by @denalth | v5.2.1", Font = new Font("Segoe UI", 8), ForeColor = Color.Gray, AutoSize = true, Location = new Point(150, 280) };
+        Label lblFooter = new Label { Text = "Powered by @denalth | v5.4.0", Font = new Font("Segoe UI", 8), ForeColor = Color.Gray, AutoSize = true, Location = new Point(150, 280) };
         this.Controls.Add(lblFooter);
     }
 
     private void btnStart_Click(object sender, EventArgs e)
     {
-        string scriptPath = @"F:\.Antigravity\Otimizador Windows\Lancar_GUI.ps1";
+        // CAMINHO DINAMICO: BaseDirectory pega a pasta onde o .exe esta
+        string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+        string scriptPath = Path.Combine(baseDir, "Lancar_GUI.ps1");
+
         if (!File.Exists(scriptPath)) {
-            MessageBox.Show("Script nao encontrado: " + scriptPath, "Erro");
+            MessageBox.Show("Script Lancar_GUI.ps1 nao encontrado no diretorio: " + baseDir, "Erro de Localizacao");
             return;
         }
 
         ProcessStartInfo psi = new ProcessStartInfo {
             FileName = "powershell.exe",
-            // REMOVIDO -NoExit E ADICIONADO -WindowStyle Hidden
             Arguments = "-WindowStyle Hidden -NoProfile -ExecutionPolicy Bypass -File \"" + scriptPath + "\"",
             Verb = "runas",
             UseShellExecute = true,
-            WindowStyle = ProcessWindowStyle.Hidden // Força ocultação
+            WindowStyle = ProcessWindowStyle.Hidden
         };
 
         try {
             Process.Start(psi);
             this.WindowState = FormWindowState.Minimized;
         } catch (Exception ex) {
-            MessageBox.Show("Erro ao iniciar: " + ex.Message, "Erro");
+            MessageBox.Show("Erro ao iniciar o processo: " + ex.Message, "Erro Critico");
         }
     }
 }
@@ -114,3 +116,4 @@ class Program
         Application.Run(new MainForm());
     }
 }
+

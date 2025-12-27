@@ -1,29 +1,32 @@
 # Autoria: @denalth
-# Windows Optimizer v5.2.1 (Elite Modern UI)
+# Windows Optimizer v5.4.0 (Real Validation Edition)
 
-O otimizador definitivo para Windows 11, com interface **moderna, profissional e suprema**.
+O otimizador definitivo para Windows 11 com **57 acoes reais** e **validacao pos-execucao**.
 
-![Version](https://img.shields.io/badge/Version-5.2.1-blue)
+![Version](https://img.shields.io/badge/Version-5.4.0-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
----
+## Novidades da v5.4.0
+- **Feedback Honesto**: Cada acao verifica se realmente funcionou antes de informar "OK".
+- **Diagnostico Expandido**: CPU, RAM, OS e Disco com dados reais.
+- **Instalacoes Validadas**: Verifica se o programa foi instalado antes de confirmar.
+- **Relatorios Automaticos**: Energia abre automaticamente no navegador.
 
-## 🔥 Novidades da v5.2.1
+## Inicio Rapido
+1. Execute `WindowsOptimizer.exe` como Admin.
+2. Selecione uma categoria no menu lateral.
+3. Clique em EXECUTAR e veja o log de validacao.
 
-- **Design Elite**: Interface Modern UI com foco em legibilidade.
-- **Categorias Limpas**: 13 seções em MAIÚSCULO para melhor navegação.
-- **Estabilidade Total**: Remoção de emojis para garantir compatibilidade de encoding.
-- **50+ Tweaks**: Performance, Limpeza, Segurança e muito mais.
+## Categorias (14)
+PERFORMANCE | LIMPEZA | SEGURANCA | PRIVACIDADE | VISUAIS | SERVICOS | WINDOWS UPDATE | DEV TOOLS | SDKS | WSL2 | REDE | BLOATWARES | PERFIS | SELF-UPDATE
 
----
-
-## 🏗️ Estrutura do Projeto
-
+## Estrutura
 ```
 Otimizador Windows/
-├── WindowsOptimizer.exe     # Lançador Nativo C#
-├── Lancar_GUI.ps1           # Interface Gráfica v5.2.1
-└── modules/                 # Módulos de otimização
+├── WindowsOptimizer.exe  # Launcher C# (portatil)
+├── Lancar_GUI.ps1        # Interface Principal
+├── modules/              # Modulos de suporte
+└── version.txt           # 5.4.0
 ```
 
-Desenvolvido por **@denalth** | 2025
+Desenvolvido por @denalth | 2025

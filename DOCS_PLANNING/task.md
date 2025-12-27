@@ -1,33 +1,29 @@
-# Tasklist - Windows Optimizer @denalth
+# Autoria: @denalth
+# Tasklist - Windows Optimizer
 
-## Fases Concluidas (v1.0 - v5.2.1)
+## Fases Concluidas (v1.0 - v5.4.0)
 - [x] Motor PowerShell e Orquestrador
 - [x] Interface Grafica por Categorias
 - [x] Evolucao para C# Nativo
 - [x] Sistema de Seguranca e Relatorios
 - [x] Splash Screen Animada
-- [x] Elite Modern UI
-- [x] Emojis, Maiusculas e Toggle de Tema (v5.2.1)
+- [x] Elite Modern UI (v5.2.1)
+- [x] Expansao 57 Acoes + Self-Update (v5.3.0)
+- [x] Correcao de Portabilidade (v5.3.1)
+- [x] Validacao Real e Feedback Honesto (v5.4.0)
 
 ## Proximos Passos (v6.0+)
 - [ ] Icone customizado no .exe
-- [ ] Self-Update (verificacao automatica)
-
-## 👤 TAREFAS DO MESTRE (@denalth)
-- [ ] Subir para o Git manualmente (Commit/Tag v5.2.1)
-- [ ] Validar ocultacao total do terminal
 
 ---
 
-## ⚠️ TAREFA RECORRENTE (OBRIGATORIA)
+## TAREFA RECORRENTE (OBRIGATORIA)
 
-**Ao fim de CADA FASE, revisar e atualizar:**
+Ao fim de CADA FASE, revisar e atualizar:
 - [ ] version.txt
 - [ ] README.md
 - [ ] CHANGELOG.MD
-- [ ] LICENSE
-- [ ] CONTRIBUTING.md
-- [ ] DOCS_PLANNING/task.md
-- [ ] DOCS_PLANNING/implementation_plan.md
+- [ ] task.md / implementation_plan.md
+- [ ] Commit e Tag no Git
 
-**STATUS: PRODUTO v5.2.1 COMPLETO E DOCUMENTADO**
+**STATUS: PRODUTO v5.4.0 - VALIDACAO REAL**

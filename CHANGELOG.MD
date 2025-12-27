@@ -1,36 +1,29 @@
 # Autoria: @denalth
 # Changelog - Windows Optimizer
 
----
+## [5.4.0] - 2025-12-27 (Real Validation Edition)
 
-## [5.2.1] - 2025-12-27 (Polish Final)
+### Novo
+- **Validacao Pos-Execucao**: Cada acao verifica se funcionou antes de logar "OK".
+- **Diagnostico Expandido**: Mostra CPU, RAM, OS Build e Disco.
+- **Install-WithValidation**: Instala e confirma via `winget list`.
+- **Abertura Automatica**: Relatorio de energia abre no navegador.
 
-### 🎨 Refinamentos de Interface
-- **MAIUSCULAS**: Todos os nomes de categorias em caixa alta.
-- **Emojis**: Icones visuais em cada categoria (⚡🧹🛡️🔒🎨⚙️🔄💻📦🐧🌐🗑️👤).
-- **Toggle de Tema**: Botao para alternar entre Tema Escuro e Claro.
-
----
-
-## [5.2.0] - 2025-12-27 (Elite Modern UI)
-
-### �� Redesign Completo
-- Interface Flat Dark sem bordas 3D.
-- Paleta: Background #121212, Sidebar #1E1E1E, Accent #0078D4.
-- Fontes Segoe UI (Semibold para titulos).
-- Hover Effects nos botoes.
-
-### 🔧 Restauracao Total
-- 13 Categorias e 50+ Acoes funcionais.
-- Corrigido erro de sintaxe [ordered].
+### Corrigido
+- Ações "fake" que reportavam sucesso sem executar.
+- Logs vagos substituídos por mensagens detalhadas.
 
 ---
 
-## [5.1.x] - 2025-12-27
-- Splash Screen, hotfixes de sintaxe.
+## [5.3.1] - 2025-12-27 (Portabilidade)
+- Removidos caminhos absolutos (F:\...) do executável.
+- Agora portátil: funciona em qualquer pasta ou drive.
 
-## [5.0.0] - 2025-12-27
-- Sistema de Backup/Undo, Diagnostico, Logs Persistentes.
+## [5.3.0] - 2025-12-27 (Supreme Edition)
+- 57 ações, 14 categorias, Self-Update.
 
-## [4.x.x] - 2025-12-26
-- Evolucao para C# Nativo.
+## [5.2.1] - 2025-12-27
+- Terminal oculto, design estável.
+
+## [5.2.0] - 2025-12-27
+- Elite Modern UI.
