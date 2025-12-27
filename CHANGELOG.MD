@@ -1,6 +1,11 @@
 # Autoria: @denalth
 # Changelog - Windows Optimizer
 
+## [5.4.1] - 2025-12-27 (Fix Operacional)
+### Corrigido
+- **LogBox Winget**: Agora exibe o log real de download e instalacao em tempo real.
+- **Erro 0x80072EE6**: Implementado reset de Proxy WinHTTP para resolver falhas de rede no Update.
+- **Higienizacao**: Removidos arquivos legados e redundantes da raiz do projeto.
 ## [5.4.0] - 2025-12-27 (Real Validation Edition)
 
 ### Novo
@@ -27,3 +32,4 @@
 
 ## [5.2.0] - 2025-12-27
 - Elite Modern UI.
+

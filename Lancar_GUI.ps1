@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# Lancar_GUI.ps1 - Interface Grafica v5.4.0 (Real Validation Edition)
+# Lancar_GUI.ps1 - Interface Grafica v5.4.1 (Real Validation Edition)
 # Windows Optimizer - Feedback Honesto e Verificacao Real
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -23,7 +23,7 @@ $ColorDanger = [System.Drawing.Color]::FromArgb(255, 80, 80)
 
 # === FORM PRINCIPAL ===
 $Form = New-Object System.Windows.Forms.Form
-$Form.Text = "Windows Optimizer v5.4.0 - @denalth"
+$Form.Text = "Windows Optimizer v5.4.1 - @denalth"
 $Form.Size = New-Object System.Drawing.Size(1100, 700)
 $Form.StartPosition = "CenterScreen"
 $Form.BackColor = $ColorBg
@@ -47,13 +47,32 @@ function Add-Log {
 
 # === FUNCAO DE INSTALACAO COM VALIDACAO REAL ===
 function Install-WithValidation {
-    param([string]$PackageId, [string]$Name)
+    param([string]PackageId, [string]Name)
     Add-Log "EXEC" "Verificando se $Name ja esta instalado..."
     $installed = winget list --id $PackageId 2>$null | Select-String $PackageId
     if ($installed) {
-        Add-Log "INFO" "$Name ja esta instalado no sistema."
+        Add-Log "INFO" "$Name ja esta instalado."
         return
     }
+    Add-Log "EXEC" "Iniciando instalacao de $Name..."
+    $psi = New-Object System.Diagnostics.ProcessStartInfo
+    $psi.FileName = "winget"
+    $psi.Arguments = "install --id $PackageId -e --accept-package-agreements --accept-source-agreements"
+    $psi.RedirectStandardOutput = $true
+    $psi.RedirectStandardError = $true
+    $psi.UseShellExecute = $false
+    $psi.CreateNoWindow = $true
+    $proc = [System.Diagnostics.Process]::Start($psi)
+    while (-not $proc.HasExited) {
+        $line = $proc.StandardOutput.ReadLine()
+        if ($line) { Add-Log "WINGET" $line.Trim() }
+        [System.Windows.Forms.Application]::DoEvents()
+    }
+    $proc.WaitForExit()
+    $check = winget list --id $PackageId 2>$null | Select-String $PackageId
+    if ($check) { Add-Log "OK" "$Name instalado com sucesso!" }
+    else { Add-Log "WARN" "Falha ao instalar $Name. Verifique no Terminal." }
+}
     Add-Log "EXEC" "Instalando $Name (aguarde)..."
     $result = winget install --id $PackageId -e --silent --accept-package-agreements --accept-source-agreements 2>&1
     Start-Sleep -Seconds 2
@@ -284,21 +303,20 @@ $Categories = [ordered]@{
     "WINDOWS UPDATE" = @{
         Color = [System.Drawing.Color]::FromArgb(0, 120, 215)
         Actions = @(
-            @{Name="Verificar Atualizacoes"; Desc="Busca updates"; Action={
-                Add-Log "EXEC" "Verificando atualizacoes..."
+            @{Name="Verificar Atualizacoes"; Desc="Busca e resolve erros de rede"; Action={
+                Add-Log "EXEC" "Limpando proxy e rede para Update..."
+                netsh winhttp reset proxy 2>$null
+                Add-Log "EXEC" "Buscando atualizacoes..."
                 try{
-                    $Session = New-Object -ComObject Microsoft.Update.Session
-                    $Searcher = $Session.CreateUpdateSearcher()
-                    $Result = $Searcher.Search("IsInstalled=0")
-                    $count = $Result.Updates.Count
-                    Add-Log "INFO" "Encontradas $count atualizacoes pendentes."
-                    if ($count -gt 0) {
-                        foreach ($u in $Result.Updates) {
-                            Add-Log "INFO" "  - $($u.Title)"
-                        }
-                    }
+                    $S = New-Object -ComObject Microsoft.Update.Session
+                    $R = $S.CreateUpdateSearcher().Search("IsInstalled=0")
+                    Add-Log "INFO" "Encontradas $($R.Updates.Count) pendentes."
                 }catch{
-                    Add-Log "WARN" "Erro ao verificar: $($_.Exception.Message)"
+                    Add-Log "WARN" "Erro HRESULT: $($.Exception.HResult). Tentando reset total..."
+                    Stop-Service wuauserv,bits -Force -EA SilentlyContinue
+                    Remove-Item "C:\Windows\SoftwareDistribution\Download\*" -Recurse -Force -EA SilentlyContinue
+                    Start-Service wuauserv,bits -EA SilentlyContinue
+                    Add-Log "INFO" "Ambiente resetado. Tente novamente."
                 }
             }},
             @{Name="Pausar por 7 dias"; Desc="Adia atualizacoes"; Action={
@@ -577,7 +595,7 @@ $global:LogBox.BorderStyle = "None"
 $LogPanel.Controls.Add($global:LogBox)
 
 $Footer = New-Object System.Windows.Forms.Label
-$Footer.Text = "Windows Optimizer v5.4.0 | @denalth | Real Validation Edition"
+$Footer.Text = "Windows Optimizer v5.4.1 | @denalth | Real Validation Edition"
 $Footer.Font = New-Object System.Drawing.Font("Segoe UI", 8)
 $Footer.ForeColor = $ColorTextDim
 $Footer.Location = New-Object System.Drawing.Point(350, 560)
@@ -585,3 +603,4 @@ $Footer.AutoSize = $true
 $Form.Controls.Add($Footer)
 
 [void]$Form.ShowDialog()
+

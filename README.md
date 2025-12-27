@@ -1,12 +1,12 @@
 # Autoria: @denalth
-# Windows Optimizer v5.4.0 (Real Validation Edition)
+# Windows Optimizer v5.4.1 (Real Validation Edition)
 
 O otimizador definitivo para Windows 11 com **57 acoes reais** e **validacao pos-execucao**.
 
 ![Version](https://img.shields.io/badge/Version-5.4.0-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## Novidades da v5.4.0
+## Novidades da v5.4.1
 - **Feedback Honesto**: Cada acao verifica se realmente funcionou antes de informar "OK".
 - **Diagnostico Expandido**: CPU, RAM, OS e Disco com dados reais.
 - **Instalacoes Validadas**: Verifica se o programa foi instalado antes de confirmar.
@@ -30,3 +30,4 @@ Otimizador Windows/
 ```
 
 Desenvolvido por @denalth | 2025
+
