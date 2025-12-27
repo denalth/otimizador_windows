@@ -1,5 +1,5 @@
 // Autoria: @denalth
-// Program.cs - Windows Optimizer v5.4.1
+// Program.cs - Windows Optimizer v5.4.2
 // Aplicativo nativo C# com Caminhos Dinamicos (Portabilidade)
 
 using System;
@@ -26,7 +26,7 @@ class SplashScreen : Form
         this.BackColor = Color.FromArgb(18, 18, 18);
 
         lblTitle = new Label { Text = "WINDOWS OPTIMIZER", Font = new Font("Segoe UI", 22, FontStyle.Bold), ForeColor = Color.White, AutoSize = true, Location = new Point(50, 50) };
-        lblVersion = new Label { Text = "v5.4.1 by @denalth", Font = new Font("Segoe UI", 10, FontStyle.Italic), ForeColor = Color.FromArgb(0, 120, 215), AutoSize = true, Location = new Point(130, 95) };
+        lblVersion = new Label { Text = "v5.4.2 by @denalth", Font = new Font("Segoe UI", 10, FontStyle.Italic), ForeColor = Color.FromArgb(0, 120, 215), AutoSize = true, Location = new Point(130, 95) };
         lblLoading = new Label { Text = "Carregando modulos...", Font = new Font("Segoe UI", 9), ForeColor = Color.Gray, AutoSize = true, Location = new Point(135, 150) };
         progressBar = new ProgressBar { Location = new Point(50, 180), Size = new Size(300, 20), Style = ProgressBarStyle.Continuous, Value = 0 };
 
@@ -49,7 +49,7 @@ class MainForm : Form
 {
     public MainForm()
     {
-        this.Text = "Windows Optimizer v5.4.1";
+        this.Text = "Windows Optimizer v5.4.2";
         this.Size = new Size(450, 350);
         this.StartPosition = FormStartPosition.CenterScreen;
         this.FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -73,7 +73,7 @@ class MainForm : Form
         btnStart.Click += btnStart_Click;
         this.Controls.Add(btnStart);
 
-        Label lblFooter = new Label { Text = "Powered by @denalth | v5.4.1", Font = new Font("Segoe UI", 8), ForeColor = Color.Gray, AutoSize = true, Location = new Point(150, 280) };
+        Label lblFooter = new Label { Text = "Powered by @denalth | v5.4.2", Font = new Font("Segoe UI", 8), ForeColor = Color.Gray, AutoSize = true, Location = new Point(150, 280) };
         this.Controls.Add(lblFooter);
     }
 
@@ -116,5 +116,6 @@ class Program
         Application.Run(new MainForm());
     }
 }
+
 
 

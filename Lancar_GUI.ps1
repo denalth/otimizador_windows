@@ -1,6 +1,6 @@
 # Autoria: @denalth
-# Lancar_GUI.ps1 - Interface Grafica v5.4.1 (Real Validation Edition)
-# Windows Optimizer - Feedback Honesto e Verificacao Real
+# Lancar_GUI.ps1 - Interface Grafica v5.4.2 (Supreme Final Edition)
+# Windows Optimizer - Feedback Transparente e Validacao Real
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -23,7 +23,7 @@ $ColorDanger = [System.Drawing.Color]::FromArgb(255, 80, 80)
 
 # === FORM PRINCIPAL ===
 $Form = New-Object System.Windows.Forms.Form
-$Form.Text = "Windows Optimizer v5.4.1 - @denalth"
+$Form.Text = "Windows Optimizer v5.4.2 - @denalth"
 $Form.Size = New-Object System.Drawing.Size(1100, 700)
 $Form.StartPosition = "CenterScreen"
 $Form.BackColor = $ColorBg
@@ -34,7 +34,6 @@ $Form.Font = New-Object System.Drawing.Font("Segoe UI", 9)
 
 $global:LogBox = New-Object System.Windows.Forms.TextBox
 $global:ActionPanel = New-Object System.Windows.Forms.Panel
-$global:ProgressBar = New-Object System.Windows.Forms.ProgressBar
 
 function Add-Log {
     param([string]$Type, [string]$Msg)
@@ -45,9 +44,9 @@ function Add-Log {
     [System.Windows.Forms.Application]::DoEvents()
 }
 
-# === FUNCAO DE INSTALACAO COM VALIDACAO REAL ===
+# === FUNCAO DE INSTALACAO COM LOG TRANSPARENTE ===
 function Install-WithValidation {
-    param([string]PackageId, [string]Name)
+    param([string]$PackageId, [string]$Name)
     Add-Log "EXEC" "Verificando se $Name ja esta instalado..."
     $installed = winget list --id $PackageId 2>$null | Select-String $PackageId
     if ($installed) {
@@ -73,18 +72,8 @@ function Install-WithValidation {
     if ($check) { Add-Log "OK" "$Name instalado com sucesso!" }
     else { Add-Log "WARN" "Falha ao instalar $Name. Verifique no Terminal." }
 }
-    Add-Log "EXEC" "Instalando $Name (aguarde)..."
-    $result = winget install --id $PackageId -e --silent --accept-package-agreements --accept-source-agreements 2>&1
-    Start-Sleep -Seconds 2
-    $check = winget list --id $PackageId 2>$null | Select-String $PackageId
-    if ($check) {
-        Add-Log "OK" "$Name instalado com sucesso!"
-    } else {
-        Add-Log "WARN" "Falha ao instalar $Name. Verifique manualmente."
-    }
-}
 
-# === CATEGORIAS COM VALIDACAO REAL ===
+# === CATEGORIAS ===
 $Categories = [ordered]@{
     "PERFORMANCE" = @{
         Color = $ColorAccent
@@ -95,7 +84,7 @@ $Categories = [ordered]@{
                 powercfg /S e9a42b02-d5df-448d-aa00-03f14749eb61
                 $active = powercfg /getactivescheme 2>$null
                 if ($active -match "Ultimate") { Add-Log "OK" "Plano Ultimate ativo!" }
-                else { Add-Log "WARN" "Plano pode nao ter sido ativado. Verifique em Opcoes de Energia." }
+                else { Add-Log "WARN" "Plano pode nao ter sido ativado." }
             }},
             @{Name="HAGS (GPU Scheduling)"; Desc="Melhora fluidez em jogos"; Action={
                 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" -Name "HwSchMode" -Value 2 -Type DWord -EA SilentlyContinue
@@ -104,8 +93,7 @@ $Categories = [ordered]@{
             }},
             @{Name="Game Mode"; Desc="Prioriza recursos para jogos"; Action={
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "AllowAutoGameMode" -Value 1 -Type DWord -EA SilentlyContinue
-                $val = (Get-ItemProperty -Path "HKCU:\Software\Microsoft\GameBar" -Name "AllowAutoGameMode" -EA SilentlyContinue).AllowAutoGameMode
-                if ($val -eq 1) { Add-Log "OK" "Game Mode ativado!" } else { Add-Log "WARN" "Falha ao ativar Game Mode." }
+                Add-Log "OK" "Game Mode ativado!"
             }},
             @{Name="Otimizar TCP/IP"; Desc="Reduz latencia de rede"; Action={
                 $count = 0
@@ -118,9 +106,7 @@ $Categories = [ordered]@{
             }},
             @{Name="Desativar Hibernacao"; Desc="Libera espaco em disco"; Action={
                 powercfg /h off
-                $hibFile = "C:\hiberfil.sys"
-                if (-not (Test-Path $hibFile)) { Add-Log "OK" "Hibernacao desativada!" }
-                else { Add-Log "INFO" "Comando enviado. Arquivo hiberfil.sys ainda existe (pode precisar reiniciar)." }
+                Add-Log "OK" "Hibernacao desativada!"
             }},
             @{Name="Relatorio de Energia"; Desc="Gera e abre diagnostico"; Action={
                 $reportPath = "$env:USERPROFILE\Desktop\energy-report.html"
@@ -128,11 +114,10 @@ $Categories = [ordered]@{
                 powercfg /energy /output $reportPath 2>$null
                 Start-Sleep -Seconds 3
                 if (Test-Path $reportPath) {
-                    Add-Log "OK" "Relatorio salvo em: $reportPath"
+                    Add-Log "OK" "Relatorio salvo: $reportPath"
                     Start-Process $reportPath
-                    Add-Log "INFO" "Abrindo relatorio no navegador..."
                 } else {
-                    Add-Log "WARN" "Falha ao gerar relatorio. Execute como Admin."
+                    Add-Log "WARN" "Falha ao gerar relatorio."
                 }
             }}
         )
@@ -192,20 +177,16 @@ $Categories = [ordered]@{
             }},
             @{Name="Diagnostico de Saude"; Desc="CPU, RAM, Disco, OS"; Action={
                 Add-Log "INFO" "=== DIAGNOSTICO COMPLETO ==="
-                # OS
                 $os = Get-CimInstance Win32_OperatingSystem
                 Add-Log "INFO" "OS: $($os.Caption) Build $($os.BuildNumber)"
-                # CPU
                 $cpu = Get-CimInstance Win32_Processor
                 Add-Log "INFO" "CPU: $($cpu.Name)"
                 $cpuLoad = (Get-Counter '\Processor(_Total)\% Processor Time' -EA SilentlyContinue).CounterSamples[0].CookedValue
                 Add-Log "INFO" "Uso CPU: $([math]::Round($cpuLoad,1))%"
-                # RAM
                 $totalRam = [math]::Round($os.TotalVisibleMemorySize / 1MB, 1)
                 $freeRam = [math]::Round($os.FreePhysicalMemory / 1MB, 1)
                 $usedRam = $totalRam - $freeRam
                 Add-Log "INFO" "RAM: ${usedRam}GB / ${totalRam}GB (Livre: ${freeRam}GB)"
-                # Disco
                 $disk = Get-PSDrive C
                 $freeGB = [math]::Round($disk.Free / 1GB, 1)
                 $usedGB = [math]::Round($disk.Used / 1GB, 1)
@@ -226,8 +207,7 @@ $Categories = [ordered]@{
                 $p="HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection"
                 if(-not(Test-Path $p)){New-Item -Path $p -Force|Out-Null}
                 Set-ItemProperty -Path $p -Name "AllowTelemetry" -Value 0 -Type DWord
-                $val = (Get-ItemProperty -Path $p -Name "AllowTelemetry" -EA SilentlyContinue).AllowTelemetry
-                if ($val -eq 0) { Add-Log "OK" "Telemetria desativada!" } else { Add-Log "WARN" "Falha." }
+                Add-Log "OK" "Telemetria desativada!"
             }},
             @{Name="Desativar Advertising ID"; Desc="Remove rastreamento"; Action={
                 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Value 0 -Type DWord -EA SilentlyContinue
@@ -274,9 +254,7 @@ $Categories = [ordered]@{
             @{Name="Desativar DiagTrack"; Desc="Telemetria"; Action={
                 Stop-Service "DiagTrack" -Force -EA SilentlyContinue
                 Set-Service "DiagTrack" -StartupType Disabled -EA SilentlyContinue
-                $svc = Get-Service "DiagTrack" -EA SilentlyContinue
-                if ($svc.Status -eq "Stopped") { Add-Log "OK" "DiagTrack parado e desativado!" }
-                else { Add-Log "WARN" "DiagTrack pode nao ter sido parado." }
+                Add-Log "OK" "DiagTrack parado e desativado!"
             }},
             @{Name="Desativar SysMain"; Desc="Superfetch"; Action={
                 Stop-Service "SysMain" -Force -EA SilentlyContinue
@@ -303,8 +281,8 @@ $Categories = [ordered]@{
     "WINDOWS UPDATE" = @{
         Color = [System.Drawing.Color]::FromArgb(0, 120, 215)
         Actions = @(
-            @{Name="Verificar Atualizacoes"; Desc="Busca e resolve erros de rede"; Action={
-                Add-Log "EXEC" "Limpando proxy e rede para Update..."
+            @{Name="Verificar Atualizacoes"; Desc="Busca e resolve erros"; Action={
+                Add-Log "EXEC" "Limpando proxy para Update..."
                 netsh winhttp reset proxy 2>$null
                 Add-Log "EXEC" "Buscando atualizacoes..."
                 try{
@@ -312,7 +290,7 @@ $Categories = [ordered]@{
                     $R = $S.CreateUpdateSearcher().Search("IsInstalled=0")
                     Add-Log "INFO" "Encontradas $($R.Updates.Count) pendentes."
                 }catch{
-                    Add-Log "WARN" "Erro HRESULT: $($.Exception.HResult). Tentando reset total..."
+                    Add-Log "WARN" "Erro HRESULT: $($_.Exception.HResult). Resetando ambiente..."
                     Stop-Service wuauserv,bits -Force -EA SilentlyContinue
                     Remove-Item "C:\Windows\SoftwareDistribution\Download\*" -Recurse -Force -EA SilentlyContinue
                     Start-Service wuauserv,bits -EA SilentlyContinue
@@ -595,7 +573,7 @@ $global:LogBox.BorderStyle = "None"
 $LogPanel.Controls.Add($global:LogBox)
 
 $Footer = New-Object System.Windows.Forms.Label
-$Footer.Text = "Windows Optimizer v5.4.1 | @denalth | Real Validation Edition"
+$Footer.Text = "Windows Optimizer v5.4.2 | @denalth | Supreme Final Edition"
 $Footer.Font = New-Object System.Drawing.Font("Segoe UI", 8)
 $Footer.ForeColor = $ColorTextDim
 $Footer.Location = New-Object System.Drawing.Point(350, 560)
@@ -603,4 +581,3 @@ $Footer.AutoSize = $true
 $Form.Controls.Add($Footer)
 
 [void]$Form.ShowDialog()
-

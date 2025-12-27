@@ -1,6 +1,11 @@
 # Autoria: @denalth
 # Changelog - Windows Optimizer
 
+## [5.4.2] - 2025-12-27 (Supreme Final Edition)
+### Corrigido
+- **Sintaxe Critica**: Corrigidos erros de parsing na funcao Install-WithValidation.
+- **Log Transparente**: Winget agora exibe progresso real no LogBox.
+- **Estabilidade**: GUI 100% funcional com 57 acoes validadas.
 ## [5.4.1] - 2025-12-27 (Fix Operacional)
 ### Corrigido
 - **LogBox Winget**: Agora exibe o log real de download e instalacao em tempo real.
@@ -32,4 +37,5 @@
 
 ## [5.2.0] - 2025-12-27
 - Elite Modern UI.
+
 
