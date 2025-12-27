@@ -1,5 +1,5 @@
 ﻿# Autoria: @denalth
-# Lancar_GUI.ps1 - Supreme Optimizer GUI v3.2 COMPLETA COM CATEGORIAS
+# Lancar_GUI.ps1 - Windows Optimizer GUI v3.2 COMPLETA COM CATEGORIAS
 
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
@@ -219,11 +219,11 @@ $Categories = @{
 # ========== FUNCAO PARA MOSTRAR ACOES DE UMA CATEGORIA ==========
 function Show-CategoryActions {
     param([string]$catName, [hashtable]$catData)
-    
+
     $global:ActionPanel.Controls.Clear()
     $global:LogBox.Clear()
     $global:ProgressBar.Value = 0
-    
+
     $titleLabel = New-Object System.Windows.Forms.Label
     $titleLabel.Text = $catName
     $titleLabel.Font = New-Object System.Drawing.Font("Segoe UI", 14, [System.Drawing.FontStyle]::Bold)
@@ -231,18 +231,18 @@ function Show-CategoryActions {
     $titleLabel.Location = New-Object System.Drawing.Point(10, 5)
     $titleLabel.AutoSize = $true
     $global:ActionPanel.Controls.Add($titleLabel)
-    
+
     $yPos = 40
     $actionCount = $catData.Actions.Count
     $idx = 0
-    
+
     foreach ($action in $catData.Actions) {
         $idx++
         $panel = New-Object System.Windows.Forms.Panel
         $panel.Location = New-Object System.Drawing.Point(10, $yPos)
         $panel.Size = New-Object System.Drawing.Size(280, 55)
         $panel.BackColor = $ColorCard
-        
+
         $nameLabel = New-Object System.Windows.Forms.Label
         $nameLabel.Text = $action.Name
         $nameLabel.Font = New-Object System.Drawing.Font("Segoe UI", 10, [System.Drawing.FontStyle]::Bold)
@@ -250,7 +250,7 @@ function Show-CategoryActions {
         $nameLabel.Location = New-Object System.Drawing.Point(10, 5)
         $nameLabel.AutoSize = $true
         $panel.Controls.Add($nameLabel)
-        
+
         $descLabel = New-Object System.Windows.Forms.Label
         $descLabel.Text = $action.Desc
         $descLabel.Font = New-Object System.Drawing.Font("Segoe UI", 8)
@@ -258,7 +258,7 @@ function Show-CategoryActions {
         $descLabel.Location = New-Object System.Drawing.Point(10, 25)
         $descLabel.Size = New-Object System.Drawing.Size(200, 25)
         $panel.Controls.Add($descLabel)
-        
+
         $btn = New-Object System.Windows.Forms.Button
         $btn.Text = "Executar"
         $btn.Location = New-Object System.Drawing.Point(210, 12)
@@ -277,7 +277,7 @@ function Show-CategoryActions {
             }
         })
         $panel.Controls.Add($btn)
-        
+
         $global:ActionPanel.Controls.Add($panel)
         $yPos += 65
     }
@@ -286,7 +286,7 @@ function Show-CategoryActions {
 # ========== LOGIN ==========
 function Show-LoginWindow {
     $LoginForm = New-Object System.Windows.Forms.Form
-    $LoginForm.Text = "Supreme Optimizer - @denalth"
+    $LoginForm.Text = "Windows Optimizer - @denalth"
     $LoginForm.Size = New-Object System.Drawing.Size(400, 280)
     $LoginForm.StartPosition = "CenterScreen"
     $LoginForm.BackColor = $ColorDark
@@ -302,7 +302,7 @@ function Show-LoginWindow {
     $LoginForm.Controls.Add($Title)
 
     $SubTitle = New-Object System.Windows.Forms.Label
-    $SubTitle.Text = "Digite a senha @denalth"
+    $SubTitle.Text = "Digite a senha para continuar"
     $SubTitle.Font = New-Object System.Drawing.Font("Segoe UI", 10)
     $SubTitle.ForeColor = [System.Drawing.Color]::Gray
     $SubTitle.Location = New-Object System.Drawing.Point(115, 80)
@@ -346,7 +346,7 @@ function Show-LoginWindow {
 # ========== JANELA PRINCIPAL ==========
 function Show-MainWindow {
     $global:MainForm = New-Object System.Windows.Forms.Form
-    $global:MainForm.Text = "Supreme Optimizer v3.2 - by @denalth"
+    $global:MainForm.Text = "Windows Optimizer v3.2 - by @denalth"
     $global:MainForm.Size = New-Object System.Drawing.Size(900, 650)
     $global:MainForm.StartPosition = "CenterScreen"
     $global:MainForm.BackColor = $ColorDark
@@ -355,7 +355,7 @@ function Show-MainWindow {
 
     # Header
     $Header = New-Object System.Windows.Forms.Label
-    $Header.Text = "SUPREME OPTIMIZER v3.2"
+    $Header.Text = "WINDOWS OPTIMIZER v3.2"
     $Header.Font = New-Object System.Drawing.Font("Segoe UI", 18, [System.Drawing.FontStyle]::Bold)
     $Header.ForeColor = $ColorAccent
     $Header.Location = New-Object System.Drawing.Point(300, 10)
@@ -398,7 +398,7 @@ function Show-MainWindow {
     $global:ActionPanel.BackColor = [System.Drawing.Color]::FromArgb(25, 25, 30)
     $global:ActionPanel.AutoScroll = $true
     $global:MainForm.Controls.Add($global:ActionPanel)
-    
+
     $welcomeLabel = New-Object System.Windows.Forms.Label
     $welcomeLabel.Text = "Selecione uma categoria"
     $welcomeLabel.Font = New-Object System.Drawing.Font("Segoe UI", 12)
@@ -436,7 +436,7 @@ function Show-MainWindow {
 
     # Footer
     $Footer = New-Object System.Windows.Forms.Label
-    $Footer.Text = "Powered by @denalth | Supreme Optimizer v3.2 | 7 Categorias | 20+ Acoes"
+    $Footer.Text = "Powered by @denalth | Windows Optimizer v3.2 | 7 Categorias | 20+ Acoes"
     $Footer.Font = New-Object System.Drawing.Font("Segoe UI", 9)
     $Footer.ForeColor = [System.Drawing.Color]::Gray
     $Footer.Location = New-Object System.Drawing.Point(260, 575)

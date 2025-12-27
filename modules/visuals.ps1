@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# visuals.ps1 - VERSAO SUPREMA 2.2
+# visuals.ps1
 # Ajustes visuais para maximo desempenho.
 
 function Adjust-Visuals-Interactive {

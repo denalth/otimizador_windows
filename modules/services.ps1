@@ -1,45 +1,80 @@
 # Autoria: @denalth
-# services.ps1 - VERSAO SUPREMA 2.1
-# Gerenciamento de servicos do Windows.
+# services.ps1
+# Gerenciamento Selecionavel de Servicos
 
 function Services-Interactive {
     Log-Info "=== GERENCIAMENTO DE SERVICOS ==="
 
     Write-Host "`n O que isso faz?" -ForegroundColor Yellow
-    Write-Host " Desativa servicos do Windows que consomem CPU/RAM em segundo plano." -ForegroundColor Gray
-    Write-Host " Cada servico sera explicado antes de voce decidir desativa-lo.`n" -ForegroundColor Gray
-
-    Write-Host " [Q] Voltar ao Menu Principal`n" -ForegroundColor DarkGray
-    $check = Read-Host " Pressione ENTER para continuar ou Q para voltar"
-    if ($check -eq 'q' -or $check -eq 'Q') { return }
+    Write-Host " Permite desativar servicos que consomem recursos sem necessidade." -ForegroundColor Gray
+    Write-Host " Selecione os servicos para desativar (ex: 1,3) ou 'A' para Todos.`n" -ForegroundColor DarkGray
 
     $services = @(
-        @{Name = "DiagTrack"; Desc = "Telemetria e diagnostico da Microsoft. Envia dados de uso para a MS."; Risk = "Baixo"},
-        @{Name = "SysMain"; Desc = "Superfetch: pre-carrega apps na RAM. Util em HDDs, dispensavel em SSDs."; Risk = "Baixo"},
-        @{Name = "WSearch"; Desc = "Indexacao de arquivos para busca rapida. Pode consumir disco."; Risk = "Medio"},
-        @{Name = "Spooler"; Desc = "Servico de impressao. Desnecessario se nao usa impressora."; Risk = "Baixo"},
-        @{Name = "Fax"; Desc = "Servico de fax. Extremamente raro de ser usado."; Risk = "Baixo"},
-        @{Name = "RemoteRegistry"; Desc = "Permite edicao remota do registro. Risco de seguranca."; Risk = "Baixo"},
-        @{Name = "WerSvc"; Desc = "Relatorio de erros do Windows. Envia crashs para a MS."; Risk = "Baixo"},
-        @{Name = "XboxGipSvc"; Desc = "Servico de acessorios Xbox. Dispensavel se nao usa controle Xbox."; Risk = "Baixo"}
+        @{Id=1; Name="DiagTrack"; SvcName="DiagTrack"; Desc="Telemetria e rastreamento da Microsoft."; Risk="Baixo"},
+        @{Id=2; Name="SysMain"; SvcName="SysMain"; Desc="Superfetch (otimizacao de carregamento, causa uso de disco)."; Risk="Medio"},
+        @{Id=3; Name="Windows Search"; SvcName="WSearch"; Desc="Indexador de arquivos para pesquisa rapida."; Risk="Medio"},
+        @{Id=4; Name="Distributed Link Tracking"; SvcName="TrkWks"; Desc="Mantem vinculos entre arquivos em rede."; Risk="Baixo"},
+        @{Id=5; Name="Print Spooler"; SvcName="Spooler"; Desc="Gerencia filas de impressao (se nao usa impressora)."; Risk="Consulte"},
+        @{Id=6; Name="Bluetooth Support"; SvcName="bthserv"; Desc="Suporte para dispositivos Bluetooth."; Risk="Consulte"}
     )
 
-    foreach ($svc in $services) {
-        $current = Get-Service $svc.Name -ErrorAction SilentlyContinue
-        if ($current) {
-            Write-Host "`n [$($svc.Name)]" -ForegroundColor Cyan
-            Write-Host " $($svc.Desc)" -ForegroundColor Gray
-            Write-Host " Status Atual: $($current.Status) | Risco de Desativar: $($svc.Risk)" -ForegroundColor Yellow
-            Write-Host " Acao: O servico sera PARADO e configurado para NAO iniciar automaticamente.`n" -ForegroundColor Yellow
+    # Exibir Menu
+    foreach ($s in $services) {
+        $status = (Get-Service $s.SvcName -ErrorAction SilentlyContinue).Status
+        if (-not $status) { $status = "Nao Encontrado" }
+        Write-Host " [$($s.Id)] $($s.Name)" -ForegroundColor Cyan -NoNewline
+        Write-Host " [$status]" -ForegroundColor Gray -NoNewline
+        Write-Host " - $($s.Desc) (Risco: $($s.Risk))" -ForegroundColor DimGray
+    }
+    Write-Host " [A] Desativar Todos (Selecionados)" -ForegroundColor Yellow
+    Write-Host " [R] Restaurar Servicos Padrao (Manual)" -ForegroundColor Green
+    Write-Host " [Q] Voltar ao Menu Principal`n" -ForegroundColor DarkGray
 
-            if (Confirm-YesNo "Desativar $($svc.Name)?") {
-                Stop-Service -Name $svc.Name -Force -ErrorAction SilentlyContinue
-                Set-Service -Name $svc.Name -StartupType Disabled -ErrorAction SilentlyContinue
+    $selection = Read-Host " Selecao"
+
+    if ($selection -eq 'q' -or $selection -eq 'Q') { return }
+    if ($selection -eq 'r' -or $selection -eq 'R') { Restore-Services; return }
+
+    $selectedSvcs = @()
+
+    if ($selection -eq 'a' -or $selection -eq 'A') {
+        $selectedSvcs = $services
+    } else {
+        $indices = $selection -split ',' | ForEach-Object { $_.Trim() }
+        foreach ($idx in $indices) {
+            $match = $services | Where-Object { $_.Id -eq $idx }
+            if ($match) { $selectedSvcs += $match }
+        }
+    }
+
+    if ($selectedSvcs.Count -eq 0) {
+        Write-Host " Nenhum servico valido selecionado." -ForegroundColor Yellow
+        return
+    }
+
+    # Resumo
+    Write-Host "`n Voce desativara os seguintes servicos:" -ForegroundColor Red
+    foreach ($svc in $selectedSvcs) {
+        Write-Host "  - $($svc.Name) ($($svc.SvcName))" -ForegroundColor White
+    }
+    
+    if (Confirm-YesNo "Confirmar desativacao?") {
+        foreach ($svc in $selectedSvcs) {
+            Run-Safe -action {
+                Stop-Service -Name $svc.SvcName -Force -ErrorAction SilentlyContinue
+                Set-Service -Name $svc.SvcName -StartupType Disabled -ErrorAction SilentlyContinue
                 Log-Success "$($svc.Name) desativado."
-            } else {
-                Log-Info "$($svc.Name) mantido."
-            }
+            } -description "Desativar $($svc.Name)"
         }
     }
 }
 
+function Restore-Services {
+    Log-Info "Restaurando servicos para o padrao (Automatico)..."
+    $toRestore = @("DiagTrack", "SysMain", "WSearch", "TrkWks", "Spooler", "bthserv")
+    foreach ($s in $toRestore) {
+        Set-Service -Name $s -StartupType Automatic -ErrorAction SilentlyContinue
+        Start-Service -Name $s -ErrorAction SilentlyContinue
+    }
+    Log-Success "Servicos restaurados."
+}

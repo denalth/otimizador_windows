@@ -1,7 +1,5 @@
 # Autoria: @denalth
-# main-orquestrador.ps1 - VERSÃO SUPREMA DEFINITIVA 2.2
-# Orquestrador modular para Windows 11 - Dev / Gaming / Performance
-# Versão Autêntica por @denalth
+# main-orquestrador.ps1
 
 # === CONFIGURAÇÃO INICIAL ===
 $ErrorActionPreference = "Continue"
@@ -25,11 +23,11 @@ function Authenticate-User {
         Write-Host "  |                                                              |" -ForegroundColor Cyan
         Write-Host "  ================================================================" -ForegroundColor Cyan
         Write-Host ""
-        
+
         $inputKey = Read-Host "  Digite a palavra-chave de acesso"
-        
+
         if ($inputKey -eq $key) {
-            Write-Host "`n  [ACESSO CONCEDIDO] Bem-vindo, @denalth.`n" -ForegroundColor Green
+            Write-Host "`n  [ACESSO CONCEDIDO] Bem-vindo!`n" -ForegroundColor Green
             Start-Sleep -Seconds 1
             return $true
         } else {
@@ -38,7 +36,7 @@ function Authenticate-User {
             Start-Sleep -Seconds 2
         }
     }
-    
+
     Write-Host "  Muitas tentativas falhas. O script sera encerrado." -ForegroundColor Red
     Start-Sleep -Seconds 2
     exit
@@ -53,11 +51,11 @@ if (-not $CurrentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adm
     Write-Host " O script precisa de permissoes de Administrador." -ForegroundColor Yellow
     Write-Host " Tentando reiniciar automaticamente..." -ForegroundColor Cyan
     Start-Sleep -Seconds 1
-    
+
     $NewProcess = New-Object System.Diagnostics.ProcessStartInfo "PowerShell"
     $NewProcess.Arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`""
     $NewProcess.Verb = "RunAs"
-    
+
     try {
         [System.Diagnostics.Process]::Start($NewProcess) | Out-Null
         Write-Host " Nova janela solicitada. Fechando esta..." -ForegroundColor Gray
@@ -76,8 +74,8 @@ function Show-Banner {
     Write-Host ""
     Write-Host "  ================================================================" -ForegroundColor Cyan
     Write-Host "  |                                                              |" -ForegroundColor Cyan
-    Write-Host "  |        WINDOWS OPTIMIZER - VERSAO 2.2 SUPREMA                |" -ForegroundColor Cyan
-    Write-Host "  |        Assinado por: @denalth                                |" -ForegroundColor Cyan
+    Write-Host "  |        WINDOWS OPTIMIZER - VERSAO 2.2                       |" -ForegroundColor Cyan
+    Write-Host "  |        by @denalth                                          |" -ForegroundColor Cyan
     Write-Host "  |                                                              |" -ForegroundColor Cyan
     Write-Host "  ================================================================" -ForegroundColor Cyan
     Write-Host ""
@@ -85,9 +83,9 @@ function Show-Banner {
 
 # === CARREGAMENTO DE MODULOS ===
 $moduleFiles = @(
-    "utils.ps1", "bloatwares.ps1", "services.ps1", "energy.ps1", 
-    "visuals.ps1", "wsl2.ps1", "devtools.ps1", "sdks.ps1", 
-    "cleanup.ps1", "windowsupdate.ps1", "privacy.ps1", 
+    "utils.ps1", "bloatwares.ps1", "services.ps1", "energy.ps1",
+    "visuals.ps1", "wsl2.ps1", "devtools.ps1", "sdks.ps1",
+    "cleanup.ps1", "windowsupdate.ps1", "privacy.ps1",
     "gaming.ps1", "network.ps1", "gui-selector.ps1", "profiles.ps1"
 )
 
@@ -96,11 +94,11 @@ $loadedCount = 0
 foreach ($m in $moduleFiles) {
     $path = Join-Path $modulesDir $m
     if (Test-Path $path) {
-        try { 
+        try {
             . $path
-            $loadedCount++ 
-        } catch { 
-            Write-Host "  [ERRO] Falha ao carregar $m" -ForegroundColor Red 
+            $loadedCount++
+        } catch {
+            Write-Host "  [ERRO] Falha ao carregar $m" -ForegroundColor Red
         }
     }
 }
@@ -168,9 +166,9 @@ do {
         "14" { if (Get-Command Init-GitRepo -ErrorAction SilentlyContinue) { Init-GitRepo -scriptDir $scriptDir } }
         "0" { break }
     }
-    if ($choice -ne "0" -and $choice -ne "") { 
+    if ($choice -ne "0" -and $choice -ne "") {
         Write-Host "`n Pressione ENTER para voltar ao menu..." -ForegroundColor DarkGray
-        Read-Host | Out-Null 
+        Read-Host | Out-Null
     }
 } while ($choice -ne "0")
 

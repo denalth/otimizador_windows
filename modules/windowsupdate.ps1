@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# windowsupdate.ps1 - VERSAO SUPREMA 2.1
+# windowsupdate.ps1
 # Gerenciamento de atualizacoes do Windows.
 
 function WindowsUpdate-Interactive {

@@ -3,23 +3,27 @@
 
 ---
 
-## [3.2.0] - 2025-12-26 (Supreme App GUI)
+## [4.1.0] - 2025-12-27 (Native Selection)
 
-### �� Nova Experiencia de Aplicativo (APP)
-- **Interface por Categorias**: Navegacao lateral intuitiva com 7 categorias coloridas.
-- **Painel de Acoes Dinamico**: Cada categoria mostra suas acoes com nome e descricao detalhada.
-- **Log em Tempo Real**: Console interno que mostra exatamente o que esta sendo feito.
-- **Barra de Progresso**: Feedback visual constante durante a execucao.
-- **Confirmacoes Obrigatorias**: Popups interativos para garantir que voce tem controle total.
+### 🎯 Controle Cirurgico (Selecao Individual)
+- **Modulos Interativos**: Implementada a selecao por numeros em `devtools.ps1`, `sdks.ps1`, `bloatwares.ps1` e `services.ps1`.
+- **Limpeza Granular**: `cleanup.ps1` agora permite escolher areas especificas de limpeza.
+- **UX Aprimorada**: Resumo das escolhas antes da execucao e barra de progresso em lote.
 
-### 🛡️ Seguranca e Identidade
-- **Gatekeeper @denalth**: Sistema de autenticacao integrado a interface grafica.
-- **Assinatura Autoral**: Marcação `@denalth` em 100% dos arquivos.
+### 🏷️ Branding "Windows Optimizer"
+- Executavel renomeado para `WindowsOptimizer.exe`.
+- Pasta do codigo-fonte renomeada para `WindowsOptimizerApp`.
+- Atualizacao completa da identidade visual nos menus.
+
+### 📄 Licenca e Documentacao
+- **LICENSE**: Adicionada versao em Portugues (PT-BR) junto a versao em Ingles.
+- **README**: Atualizado com as novas funcionalidades de selecao.
 
 ---
 
-## [2.2.0] - 2025-12-26
-- Prototipo inicial de GUI e Perfis.
+## [4.0.0] - 2025-12-26
+- Evolucao para C# (.NET Native Wrapper).
+- Arquitetura Hibrida.
 
-## [2.1.0] - 2025-12-26
-- Integracao Mestre v5.1 e Launcher .bat.
+## [3.2.0] - 2025-12-26
+- Interface por Categorias e Log Dinamico.

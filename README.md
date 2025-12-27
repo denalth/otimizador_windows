@@ -1,26 +1,34 @@
 # Autoria: @denalth
-# Windows Optimizer - Versão 3.2 (Supreme App GUI)
+# Windows Optimizer - Versao 4.1 (Native Selection Edition)
 
-O aplicativo de otimização definitivo para Windows 11, agora com uma interface gráfica profissional e a assinatura de **@denalth**.
+O aplicativo de otimizacao definitivo para Windows 11, agora como um **executavel nativo** (.exe) com controle cirurgico e a assinatura de **@denalth**.
 
 ---
 
-## 🔥 Novidades da Versão 3.2
+## 🔥 Novidades da Versao 4.1
 
-### 🖥️ Aplicativo com Interface Gráfica (APP)
-Adeus terminal! Agora você gerencia seu Windows através de uma interface visual moderna organizada por categorias, com feedback em tempo real e barra de progresso.
+### Selecao Individual Inteligente
+Agora voce tem controle total sobre o que e instalado ou removido. Todos os modulos criticos permitem que voce escolha itens especificos:
+- **Ferramentas (DevTools)**: Escolha entre VS Code, Git, Docker, etc.
+- **SDKs**: Instale apenas os compiladores que voce precisa.
+- **Bloatwares**: Removam apenas os APPs especificos que voce nao quer.
+- **Servicos**: Desative apenas o que voce julgar desnecessario.
+- **Limpeza**: Selecione as areas de disco (User, System, Cache) para limpar.
 
-### 🛡️ Segurança: Gatekeeper @denalth
-Para garantir a integridade e autoria do projeto, o aplicativo exige a palavra-chave obrigatória: **`@denalth`**.
+### Aplicativo Nativo (C#)
+O `WindowsOptimizer.exe` e o lancador oficial. Ele e leve (7KB), seguro e abre o motor de otimizacao com um clique.
 
-### 🚀 Categorias de Otimização
-- **Performance**: Ultimate Power, HAGS, Game Mode, TCP Tweaks.
-- **Limpeza**: TEMP, Lixeira, Prefetch.
-- **Privacidade**: Telemetria, Ad ID, Cortana.
-- **Visuais**: Tema Escuro, Transparência, Animações.
-- **Serviços**: Gerenciamento de serviços críticos.
-- **Windows Update**: Verificar, Pausar e Retomar atualizações.
-- **Dev Tools**: Instalação rápida de Git, VS Code, Node.js e Python.
+### Seguranca: Gatekeeper @denalth
+O projeto permanece protegido pela palavra-chave **`@denalth`**.
+
+---
+
+## 🚀 Como Usar
+
+1. Execute **`WindowsOptimizer.exe`**.
+2. Clique em **"LANCAR MOTOR DE OTIMIZACAO"**.
+3. No terminal, digite a senha `@denalth`.
+4. Use os menus numericos para selecionar as melhorias.
 
 ---
 
@@ -28,25 +36,17 @@ Para garantir a integridade e autoria do projeto, o aplicativo exige a palavra-c
 
 ```
 Otimizador Windows/
-├── Lancar_APP.bat           # Launcher oficial do Aplicativo
-├── Lancar_GUI.ps1           # Motor da Interface Gráfica v3.2
-├── main-orquestrador.ps1    # Menu clássico via terminal
-├── README.md                # Versão Supremo @denalth
-├── CHANGELOG.MD             # Histórico de versões
-├── version.txt              # 3.2.0
-├── DOCS_PLANNING/           # Artefatos de planejamento
-└── modules/                 # Módulos funcionais @denalth
+├── WindowsOptimizer.exe     # Aplicativo nativo (v4.1)
+├── WindowsOptimizerApp/     # Codigo-fonte C#
+├── main-orquestrador.ps1    # Motor PowerShell v4.1
+├── modules/                 # Modulos funcionais interativos
+├── README.md
+├── CHANGELOG.MD
+├── LICENSE                  # Licenca Hacker MIT (PT-BR / EN)
+└── version.txt              # 4.1.0
 ```
 
 ---
 
-## 🚀 Como Usar
-
-1. Execute o **`Lancar_APP.bat`**.
-2. Digite a palavra-chave **`@denalth`**.
-3. Selecione a categoria e execute as otimizações desejadas.
-
----
-
 ## 🏷️ Autoria e Identidade
-Este projeto é uma obra autoral de **@denalth**. Cada arquivo contém a marcação de autoria para preservar a originalidade do código.
+Este projeto e uma obra autoral de **@denalth**. Cada arquivo contém a marcação de autoria para preservar a integridade do código.

@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# gui-selector.ps1 - PROTOTIPO GUI SUPREMA v1.0
+# gui-selector.ps1
 # Interface grafica moderna para o Otimizador Windows.
 
 Add-Type -AssemblyName System.Windows.Forms
@@ -7,7 +7,7 @@ Add-Type -AssemblyName System.Drawing
 
 function Show-SupremeGUI {
     $Form = New-Object System.Windows.Forms.Form
-    $Form.Text = "Windows Optimizer v2.2 - @denalth"
+    $Form.Text = "Windows Optimizer - by: @denalth"
     $Form.Size = New-Object System.Drawing.Size(500,600)
     $Form.StartPosition = "CenterScreen"
     $Form.BackColor = [System.Drawing.Color]::FromArgb(30, 30, 30)
@@ -17,7 +17,7 @@ function Show-SupremeGUI {
 
     # Icone/Logo Fake
     $LabelTitle = New-Object System.Windows.Forms.Label
-    $LabelTitle.Text = "SUPREME OPTIMIZER"
+    $LabelTitle.Text = "WINDOWS OPTIMIZER"
     $LabelTitle.Font = New-Object System.Drawing.Font("Segoe UI", 18, [System.Drawing.FontStyle]::Bold)
     $LabelTitle.ForeColor = [System.Drawing.Color]::Cyan
     $LabelTitle.Location = New-Object System.Drawing.Point(110, 20)

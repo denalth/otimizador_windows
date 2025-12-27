@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# wsl2.ps1 - VERSAO SUPREMA 2.2
+# wsl2.ps1
 # Configuração do Subsistema Linux no Windows.
 
 function Setup-WSL2-Interactive {

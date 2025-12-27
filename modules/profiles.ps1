@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# profiles.ps1 - VERSAO SUPREMA 2.2
+# profiles.ps1
 # Módulo de Perfis de Otimização Sugeridos.
 
 function Profiles-Interactive {
@@ -15,9 +15,9 @@ function Profiles-Interactive {
     Write-Host " [Q] Voltar ao Menu Principal`n" -ForegroundColor DarkGray
 
     $mode = Read-Host " Opcao"
-    
+
     if ($mode -eq 'q' -or $mode -eq 'Q') { return }
-    
+
     $opt = ""
     if ($mode -eq 'g' -or $mode -eq 'G') {
         if (Get-Command Show-SupremeGUI -ErrorAction SilentlyContinue) {
@@ -42,7 +42,7 @@ function Profiles-Interactive {
     if ($opt -eq "" -or $opt -eq "0") { return }
 
     switch ($opt) {
-        "1" { 
+        "1" {
             if (Confirm-YesNo "Aplicar configuracoes do Modo Dev?") {
                 Log-Info "Iniciando Perfil DEV..."
                 Write-Progress -Activity "Aplicando Perfil DEV" -Status "Instalando ferramentas..." -PercentComplete 20

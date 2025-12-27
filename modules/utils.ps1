@@ -1,11 +1,11 @@
 # Autoria: @denalth
-# utils.ps1 - VERSAO SUPREMA 2.1
+# utils.ps1
 # Funcoes utilitarias: Logging, Confirmacao, Execucao Segura.
 
 function Initialize-Log {
     param([string]$baseDir)
-    if (-not (Test-Path $baseDir)) { 
-        New-Item -Path $baseDir -ItemType Directory -Force | Out-Null 
+    if (-not (Test-Path $baseDir)) {
+        New-Item -Path $baseDir -ItemType Directory -Force | Out-Null
     }
     $timestamp = (Get-Date).ToString("yyyyMMdd_HHmmss")
     $logFile = Join-Path $baseDir "log_$timestamp.txt"
@@ -17,7 +17,7 @@ function Log-Info {
     param([string]$msg)
     $line = "[INFO] $msg"
     Write-Host $line -ForegroundColor Green
-    if ($global:LogFile -and (Test-Path $global:LogFile)) { 
+    if ($global:LogFile -and (Test-Path $global:LogFile)) {
         $line | Out-File $global:LogFile -Append -Encoding UTF8
     }
 }
@@ -26,7 +26,7 @@ function Log-Warning {
     param([string]$msg)
     $line = "[AVISO] $msg"
     Write-Host $line -ForegroundColor Yellow
-    if ($global:LogFile -and (Test-Path $global:LogFile)) { 
+    if ($global:LogFile -and (Test-Path $global:LogFile)) {
         $line | Out-File $global:LogFile -Append -Encoding UTF8
     }
 }
@@ -35,7 +35,7 @@ function Log-Error {
     param([string]$msg)
     $line = "[ERRO] $msg"
     Write-Host $line -ForegroundColor Red
-    if ($global:LogFile -and (Test-Path $global:LogFile)) { 
+    if ($global:LogFile -and (Test-Path $global:LogFile)) {
         $line | Out-File $global:LogFile -Append -Encoding UTF8
     }
 }
@@ -44,7 +44,7 @@ function Log-Success {
     param([string]$msg)
     $line = "[OK] $msg"
     Write-Host $line -ForegroundColor Cyan
-    if ($global:LogFile -and (Test-Path $global:LogFile)) { 
+    if ($global:LogFile -and (Test-Path $global:LogFile)) {
         $line | Out-File $global:LogFile -Append -Encoding UTF8
     }
 }
@@ -85,11 +85,11 @@ function Create-SystemRestorePoint {
 
 function Init-GitRepo {
     param([string]$scriptDir)
-    if (Test-Path (Join-Path $scriptDir ".git")) { 
+    if (Test-Path (Join-Path $scriptDir ".git")) {
         Log-Warning "Repositorio Git ja existe."
-        return 
+        return
     }
-    Run-Safe -action { 
+    Run-Safe -action {
         git init $scriptDir
         git -C $scriptDir add .
         git -C $scriptDir commit -m "feat: initial commit"

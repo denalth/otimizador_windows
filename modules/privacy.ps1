@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# privacy.ps1 - VERSAO SUPREMA 2.1
+# privacy.ps1
 # Configuracoes de privacidade e telemetria.
 
 function Privacy-Interactive {

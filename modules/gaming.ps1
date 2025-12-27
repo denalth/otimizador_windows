@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# gaming.ps1 - VERSAO SUPREMA 2.1
+# gaming.ps1
 # Otimizacoes para gaming e baixa latencia.
 
 function Gaming-Interactive {

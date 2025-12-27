@@ -1,26 +1,27 @@
-# Autoria: @denalth
-# Plano de Implementação - Versão 3.2 (Supreme App GUI)
+# Implementation Plan - Seleção Individual de Itens (Fase 5)
 
 ## Objetivo
-Transformar o Otimizador Windows em um aplicativo funcional com interface gráfica (GUI), mantendo a potência dos módulos originais sob a assinatura de @denalth.
+Aprimorar a experiência do usuário permitindo a seleção granular de ferramentas de desenvolvimento, SDKs e bloatwares, em vez de instalações/remoções automáticas em lote.
 
-## Mudanças Realizadas
+---
 
-### 1. Interface Gráfica (GUI)
-- [x] Criação do `Lancar_GUI.ps1` usando WinForms.
-- [x] Sistema de navegação lateral por categorias.
-- [x] Painel de log dinâmico e barra de progresso.
-- [x] Diálogos de confirmação antes de cada ação.
+## Propostas de Mudança
 
-### 2. Autenticação e Segurança
-- [x] Implementação do Gatekeeper `@denalth` na janela de login.
-- [x] Cabeçalho de autoria em todos os arquivos do projeto.
+### Módulos Interativos (`devtools.ps1`, `sdks.ps1`, `bloatwares.ps1`)
+- Implementar uma função de menu que lista todos os itens disponíveis com números.
+- Permitir que o usuário digite os números separados por vírgula (ex: 1,3,5) ou selecione "Tudo".
+- Adicionar uma etapa de explicação detalhada antes da confirmação final para cada grupo de itens selecionados.
 
-### 3. Integração de Módulos
-- [x] Conexão total com os 14 módulos originais (Performance, Limpeza, Update, etc).
-- [x] Integração do `winget` para instalação de DevTools dentro da GUI.
+### Padronização de UX
+- Garantir que antes de qualquer ação, o script informe:
+    - O que será feito.
+    - Por que é recomendado (ou quais os riscos).
+    - Pedir confirmação explícita.
+
+---
 
 ## Verificação
-- [x] Teste de login com a senha `@denalth`.
-- [x] Execução de cada categoria e validação do log em tempo real.
-- [x] Sincronização de tags no Git (v2.1, v2.2, v3.2).
+- [ ] Testar seleção individual no módulo `devtools.ps1`.
+- [ ] Testar seleção individual no módulo `sdks.ps1`.
+- [ ] Testar seleção individual no módulo `bloatwares.ps1`.
+- [ ] Validar se as explicações pré-execução estão claras e detalhadas.

@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# network.ps1 - VERSAO SUPREMA 2.1
+# network.ps1
 # Otimizacoes de rede e DNS.
 
 function Network-Interactive {

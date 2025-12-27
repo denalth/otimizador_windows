@@ -1,5 +1,5 @@
 # Autoria: @denalth
-# energy.ps1 - VERSAO SUPREMA 2.1
+# energy.ps1
 # Configuracoes de energia e performance.
 
 function Enable-UltimatePerformance-Interactive {
